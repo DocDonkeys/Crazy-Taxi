@@ -118,11 +118,14 @@ vec3 PhysVehicle3D::GetPosition()
 vec3 PhysVehicle3D::GetForwardVec()
 {
 	vec3 vec;
-	/*btVector3 btVec = vehicle->getForwardVector();
+	btVector3 btVec = vehicle->getForwardVector();
 
-	vec.x = btVec.x;
-	vec.y = btVec.y;
-	vec.z = btVec.z;*/
+	/*vec.x = int(btVec.x);
+	vec.y = int(btVec.y);
+	vec.z = int(btVec.z);*/
 
+	vec.x = btVec.getX();
+	vec.y = btVec.getY();
+	vec.z = btVec.getZ();
 	return vec;
 }
