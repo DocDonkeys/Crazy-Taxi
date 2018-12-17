@@ -5,6 +5,9 @@
 #include "PhysVehicle3D.h"
 #include "PhysBody3D.h"
 
+//CHANGE/FIX DIDAC
+#include"ModuleSceneIntro.h"
+
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL)
 {
 	turn = acceleration = brake = 0.0f;
@@ -168,7 +171,7 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Render();
 
 	char title[80];
-	sprintf_s(title, "%.1f Km/h, Stopped = %d", vehicle->GetKmh(), (int)stopped);
+	sprintf_s(title, "%.1f Km/h, Stopped = %d, angle = %f", vehicle->GetKmh(), (int)stopped, App->scene_intro->angle);
 	App->window->SetTitle(title);
 
 	App->camera->LookAt(vehicle->GetPosition());

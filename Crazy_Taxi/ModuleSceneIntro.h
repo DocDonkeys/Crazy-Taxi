@@ -3,11 +3,15 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
+#include "p2Point.h"
 
 #define MAX_SNAKE 2
 
 struct PhysBody3D;
 struct PhysMotor3D;
+
+//CHANGE/FIX DIDAC
+
 
 class ModuleSceneIntro : public Module
 {
@@ -41,4 +45,13 @@ public:
 
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;
+
+
+	//Vars to test
+	int x, y, z = 0;
+	float angle = 0;
+
+	int distance_x;
+	int distance_z;
+	
 };
