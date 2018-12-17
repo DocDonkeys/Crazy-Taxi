@@ -171,6 +171,9 @@ update_status ModulePlayer::Update(float dt)
 	sprintf_s(title, "%.1f Km/h, Stopped = %d", vehicle->GetKmh(), (int)stopped);
 	App->window->SetTitle(title);
 
+	App->camera->LookAt(vehicle->GetPosition());
+	App->camera->Position = vehicle->GetPosition() + vehicle->GetForwardVec() * -1;
+
 	return UPDATE_CONTINUE;
 }
 
