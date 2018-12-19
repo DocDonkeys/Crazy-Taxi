@@ -12,7 +12,6 @@ struct PhysMotor3D;
 
 //CHANGE/FIX DIDAC
 
-
 class ModuleSceneIntro : public Module
 {
 public:
@@ -54,4 +53,8 @@ public:
 	int distance_x;
 	int distance_z;
 	
+
+	//Testing Sensors
+	PhysBody3D* test;
+	Cube* c1;
 };

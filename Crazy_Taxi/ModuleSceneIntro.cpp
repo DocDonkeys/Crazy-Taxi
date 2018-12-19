@@ -27,6 +27,18 @@ bool ModuleSceneIntro::Start()
 
 
 	//Stuff to test
+	Cube* CubeTest = new Cube(2, 1, 2);
+	CubeTest->SetPos(0, 2.5f, 0);
+	CubeTest->color.Set(0,200,100);
+
+	c1 = CubeTest;
+	
+	test = App->physics->AddBody(*c1,1.0f);
+
+	//TESTING Didac
+	test->SetAsSensor(true);
+	test->collision_listeners.add(this);
+	
 	
 
 	return ret;
@@ -46,6 +58,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+
+	c1->Render();
 
 	Cube c(2,1,2);
 	c.SetPos(15,1,30);
@@ -126,5 +140,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+	if (body1 == test)
+	{
+		int workpls = 1;
+	}
 }
 
