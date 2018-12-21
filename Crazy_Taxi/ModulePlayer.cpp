@@ -142,7 +142,7 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		if (vehicle->GetKmh() >= 0.0f)
+		if (vehicle->GetKmh() > 0.0f)
 			brake = BRAKE_POWER / 4;
 		else
 			acceleration = -MAX_ACCELERATION / 2;
@@ -150,7 +150,7 @@ update_status ModulePlayer::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		if (vehicle->GetKmh() >= 0.0f)
+		if (vehicle->GetKmh() > 0.0f)
 			brake = BRAKE_POWER / 4;
 		else {
 			brake = BRAKE_POWER / 10;

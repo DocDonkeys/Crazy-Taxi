@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	//Stuff to test
 	Cube* CubeTest = new Cube(2, 1, 2);
 	CubeTest->SetPos(0, 2.5f, 0);
-	CubeTest->color.Set(0,200,100);
+	CubeTest->color.Set(0, 200, 100);
 
 	c1 = CubeTest;
 	
@@ -42,19 +42,30 @@ bool ModuleSceneIntro::Start()
 	
 
 	//Test Carles
-	float limitX = 500.0f;
-	float limitZ = 500.0f;
+	float limitX = 300.0f;
+	float limitZ = 300.0f;
+
+	float obstacleLimitX = limitX + spaceBetween / 2;
+	float obstacleLimitZ = limitZ + spaceBetween / 2;
 
 	Cube* tmpCube;
 
 	srand(time(NULL));
-	for (float currX = limitX; currX > -limitX; currX -= 110.0f) {
-		for (float currZ = limitZ; currZ > -limitZ; currZ -= 110.0f) {
+	for (float currX = limitX; currX > -limitX; currX -= spaceBetween) {
+		for (float currZ = limitZ; currZ > -limitZ; currZ -= spaceBetween) {
 			tmpCube = GenerateBuilding(currX, currZ);
 			buildings.add(tmpCube);
 			App->physics->AddBody(*tmpCube, 10000.0f);
 		}
 	}
+
+	/*for (float currX = limitX; currX > -limitX; currX -= spaceBetween) {
+		for (float currZ = limitZ; currZ > -limitZ; currZ -= spaceBetween) {
+			tmpCube = GenerateObstacle(currX, currZ);
+			buildings.add(tmpCube);
+			App->physics->AddBody(*tmpCube, 10000.0f);
+		}
+	}*/
 
 	//Test carles 2
 	/*c2 = new Cube(2, 1, 2);
@@ -90,8 +101,26 @@ update_status ModuleSceneIntro::Update(float dt)
 	c1->Render();
 
 	//City Rendering
-	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next)
+	if (disco > 20) {
+		float red;
+		float green;
+		float blue;
+
+		for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
+			red = (float)(rand() % 101) / 100.0f;
+			green = (float)(rand() % 101) / 100.0f;
+			blue = (float)(rand() % 101) / 100.0f;
+			item->data->color.Set(red, green, blue);
+		}
+		disco = 0;
+	}
+	else {
+		disco++;
+	}
+
+	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
 		item->data->Render();
+	}
 
 	Cube c(2,1,2);
 	c.SetPos(15,1,30);
@@ -180,15 +209,30 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 Cube* ModuleSceneIntro::GenerateBuilding(int x, int z)
 {
-	float height = (float)(rand() % (300 - 10 + 1) + 10);
+	float height = (float)(rand() % (100 - 10 + 1) + 10);
 
-	float red = (float)(rand() % (255 + 1));
-	float green = (float)(rand() % (255 + 1));
-	float blue = (float)(rand() % (255 + 1));
+	float red = (float)(rand() % 101) / 100.0f;
+	float green = (float)(rand() % 101) / 100.0f;
+	float blue = (float)(rand() % 101) / 100.0f;
 
-	Cube* tmpCube = new Cube(50.0f, height, 50.0f);
-	tmpCube->color.Set(red, green, blue);
-	tmpCube->SetPos(x, height/2, z);
+	Cube* tmpBuilding = new Cube(buildingSize, height, buildingSize);
+	tmpBuilding->color.Set(red, green, blue);
+	tmpBuilding->SetPos(x, height/2, z);
 
-	return tmpCube;
+	return tmpBuilding;
+}
+
+ObstacleType ModuleSceneIntro::GenerateObstacle(int x, int z)
+{
+	float height = (float)(rand() % (100 - 10 + 1) + 10);
+
+	float red = (float)(rand() % 101) / 100.0f;
+	float green = (float)(rand() % 101) / 100.0f;
+	float blue = (float)(rand() % 101) / 100.0f;
+
+	Cube* tmpBuilding = new Cube(buildingSize, height, buildingSize);
+	tmpBuilding->color.Set(red, green, blue);
+	tmpBuilding->SetPos(x, height / 2, z);
+
+	return ObstacleType::NONE;
 }

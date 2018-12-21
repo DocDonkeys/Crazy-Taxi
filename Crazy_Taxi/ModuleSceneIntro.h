@@ -10,6 +10,13 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
+enum class ObstacleType
+{
+	NONE = -1,
+
+	MAX_TYPES
+};
+
 //CHANGE/FIX DIDAC
 
 class ModuleSceneIntro : public Module
@@ -26,6 +33,7 @@ public:
 
 private:
 	Cube* GenerateBuilding(int x, int z);
+	ObstacleType GenerateObstacle(int x, int z);
 
 public:
 	/*
@@ -62,6 +70,9 @@ public:
 	Cube* c1;
 
 	//Carles
+	float buildingSize = 50.0f;
+	float spaceBetween = buildingSize + 30.0f;
+	int disco = 0;
 	p2List<Cube*> buildings;
 	Cube* c2;
 
