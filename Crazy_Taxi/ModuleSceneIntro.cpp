@@ -57,11 +57,11 @@ bool ModuleSceneIntro::Start()
 	}
 
 	//Test carles 2
-	c2 = new Cube(2, 1, 2);
+	/*c2 = new Cube(2, 1, 2);
 	c2->SetPos(30.0f, 0.5f, 0);
 	c2->color.Set(0, 200, 100);
 
-	test = App->physics->AddBody(*c2, 1.0f);
+	test = App->physics->AddBody(*c2, 1.0f);*/
 
 	return ret;
 }
