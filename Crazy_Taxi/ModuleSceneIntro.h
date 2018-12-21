@@ -24,6 +24,9 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
+private:
+	Cube* GenerateBuilding(int x, int z);
+
 public:
 	/*
 	PhysBody3D* pb_snake[MAX_SNAKE];
@@ -57,4 +60,11 @@ public:
 	//Testing Sensors
 	PhysBody3D* test;
 	Cube* c1;
+
+	//Carles
+	p2List<Cube*> buildings;
+	Cube* c2;
+
+private:
+	//Cube* GenerateBuilding();
 };

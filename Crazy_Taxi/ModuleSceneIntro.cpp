@@ -4,6 +4,7 @@
 #include "Primitive.h"
 #include "PhysBody3D.h"
 #include <math.h>
+#include <ctime>
 
 //CHANGE/FIX this is included because of arrow testing
 #include "ModulePlayer.h"
@@ -39,7 +40,28 @@ bool ModuleSceneIntro::Start()
 	test->SetAsSensor(true);
 	test->collision_listeners.add(this);
 	
-	
+
+	//Test Carles
+	float limitX = 500.0f;
+	float limitZ = 500.0f;
+
+	Cube* tmpCube;
+
+	srand(time(NULL));
+	for (float currX = limitX; currX > -limitX; currX -= 110.0f) {
+		for (float currZ = limitZ; currZ > -limitZ; currZ -= 110.0f) {
+			tmpCube = GenerateBuilding(currX, currZ);
+			buildings.add(tmpCube);
+			App->physics->AddBody(*tmpCube, 10000.0f);
+		}
+	}
+
+	//Test carles 2
+	c2 = new Cube(2, 1, 2);
+	c2->SetPos(30.0f, 0.5f, 0);
+	c2->color.Set(0, 200, 100);
+
+	test = App->physics->AddBody(*c2, 1.0f);
 
 	return ret;
 }
@@ -48,6 +70,12 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	//City cleanup
+	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
+		delete item->data;
+	}
+	buildings.clear();
 
 	return true;
 }
@@ -60,6 +88,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.Render();
 
 	c1->Render();
+
+	//City Rendering
+	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next)
+		item->data->Render();
 
 	Cube c(2,1,2);
 	c.SetPos(15,1,30);
@@ -146,3 +178,17 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	}
 }
 
+Cube* ModuleSceneIntro::GenerateBuilding(int x, int z)
+{
+	float height = (float)(rand() % (300 - 10 + 1) + 10);
+
+	float red = (float)(rand() % (255 + 1));
+	float green = (float)(rand() % (255 + 1));
+	float blue = (float)(rand() % (255 + 1));
+
+	Cube* tmpCube = new Cube(50.0f, height, 50.0f);
+	tmpCube->color.Set(red, green, blue);
+	tmpCube->SetPos(x, height/2, z);
+
+	return tmpCube;
+}
