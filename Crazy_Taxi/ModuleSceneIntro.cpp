@@ -55,17 +55,15 @@ bool ModuleSceneIntro::Start()
 		for (float currZ = limitZ; currZ > -limitZ; currZ -= spaceBetween) {
 			tmpCube = GenerateBuilding(currX, currZ);
 			buildings.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 10000.0f);
+			App->physics->AddBody(*tmpCube, 100000.0f);
 		}
 	}
 
-	/*for (float currX = limitX; currX > -limitX; currX -= spaceBetween) {
-		for (float currZ = limitZ; currZ > -limitZ; currZ -= spaceBetween) {
-			tmpCube = GenerateObstacle(currX, currZ);
-			buildings.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 10000.0f);
+	for (float currX = obstacleLimitX; currX > -obstacleLimitX; currX -= spaceBetween) {
+		for (float currZ = obstacleLimitX; currZ > -obstacleLimitX; currZ -= spaceBetween) {
+			CreateObstacle(currX, currZ);
 		}
-	}*/
+	}
 
 	//Test carles 2
 	/*c2 = new Cube(2, 1, 2);
@@ -100,8 +98,8 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	c1->Render();
 
-	//City Rendering
-	if (disco > 20) {
+	//Check Disco Update
+	if (discoTime > discoLimit) {
 		float red;
 		float green;
 		float blue;
@@ -112,12 +110,13 @@ update_status ModuleSceneIntro::Update(float dt)
 			blue = (float)(rand() % 101) / 100.0f;
 			item->data->color.Set(red, green, blue);
 		}
-		disco = 0;
+		discoTime = 0;
 	}
 	else {
-		disco++;
+		discoTime++;
 	}
 
+	//City Rendering
 	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
 		item->data->Render();
 	}
@@ -222,17 +221,13 @@ Cube* ModuleSceneIntro::GenerateBuilding(int x, int z)
 	return tmpBuilding;
 }
 
-ObstacleType ModuleSceneIntro::GenerateObstacle(int x, int z)
+ObstacleType ModuleSceneIntro::CreateObstacle(int x, int z)
 {
-	float height = (float)(rand() % (100 - 10 + 1) + 10);
+	Cube tmpBuilding(5.0f, 10.0f, 5.0f);
+	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
+	tmpBuilding.SetPos(x, 10.0f / 2, z);
 
-	float red = (float)(rand() % 101) / 100.0f;
-	float green = (float)(rand() % 101) / 100.0f;
-	float blue = (float)(rand() % 101) / 100.0f;
-
-	Cube* tmpBuilding = new Cube(buildingSize, height, buildingSize);
-	tmpBuilding->color.Set(red, green, blue);
-	tmpBuilding->SetPos(x, height / 2, z);
+	App->physics->AddBody(tmpBuilding, 100000.0f);
 
 	return ObstacleType::NONE;
 }

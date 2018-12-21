@@ -33,7 +33,7 @@ public:
 
 private:
 	Cube* GenerateBuilding(int x, int z);
-	ObstacleType GenerateObstacle(int x, int z);
+	ObstacleType CreateObstacle(int x, int z);
 
 public:
 	/*
@@ -72,7 +72,8 @@ public:
 	//Carles
 	float buildingSize = 50.0f;
 	float spaceBetween = buildingSize + 30.0f;
-	int disco = 0;
+	int discoTime = 0;
+	int discoLimit = 20;
 	p2List<Cube*> buildings;
 	Cube* c2;
 
