@@ -4,6 +4,7 @@
 #include "p2Point.h"
 
 struct PhysVehicle3D;
+struct PhysBody3D;
 
 #define MAX_ACCELERATION 2000.0f
 #define TURN_DEGREES 15.0f * DEGTORAD
@@ -27,4 +28,6 @@ public:
 	float acceleration;
 	float brake;
 	bool stopped;
+
+	PhysBody3D* car_fliper;
 };

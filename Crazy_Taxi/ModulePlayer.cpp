@@ -80,10 +80,18 @@ update_status ModulePlayer::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
-		//GET the position
+	//	//GET the position
+	//	vec3 pos(vehicle->GetPosition());
+	//	//Create a new vehicle with the position we stored from the previous car
+	//	CreatePlayer(pos.x,pos.y + 2,pos.z);
+
 		vec3 pos(vehicle->GetPosition());
-		//Create a new vehicle with the position we stored from the previous car
-		CreatePlayer(pos.x,pos.y + 2,pos.z);
+
+		Cube helper(1,1,1);
+		car_fliper = App->physics->AddBody(helper, 100.0f);
+		car_fliper->SetPos(pos.x, pos.y - 10, pos.z + 1);
+		car_fliper->Push(0,5000.0f,0);
+
 	}
 
 	if (vehicle->GetKmh() < 0.2 && vehicle->GetKmh() > -0.2f) {
