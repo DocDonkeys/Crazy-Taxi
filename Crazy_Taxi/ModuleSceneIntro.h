@@ -42,7 +42,7 @@ public:
 
 private:
 	Cube* GenerateBuilding(float x, float z);
-	ObstacleType CreateObstacle(float x, float z);
+	ObstacleType CreateCrossing(float x, float z);
 
 public:
 	/*

@@ -40,26 +40,40 @@ bool ModuleSceneIntro::Start()
 	test->SetAsSensor(true);
 	test->collision_listeners.add(this);
 	
-
 	//Test Carles
-	float cityRadius = 300.0f;
+	float cityStart = 300.0f;
 	float buildingDistance = buildData.baseSize + buildData.roadSize;
-	float crossings = cityRadius + buildingDistance / 2;
-
+	float roadStart = cityStart + buildingDistance / 2;
 	Cube* tmpCube;
 
+	//Building Generator
 	srand((uint)time(NULL));
-	for (float currX = cityRadius; currX > -cityRadius; currX -= buildingDistance) {
-		for (float currZ = cityRadius; currZ > -cityRadius; currZ -= buildingDistance) {
+	for (float currX = cityStart; currX > -cityStart; currX -= buildingDistance) {
+		for (float currZ = cityStart; currZ > -cityStart; currZ -= buildingDistance) {
 			tmpCube = GenerateBuilding(currX, currZ);
 			buildings.add(tmpCube);
 			App->physics->AddBody(*tmpCube, 0.0f);
 		}
 	}
 
-	for (float currX = crossings; currX > -crossings; currX -= buildingDistance) {
-		for (float currZ = crossings; currZ > -crossings; currZ -= buildingDistance) {
-			CreateObstacle(currX, currZ);
+	//Crossings Generator
+	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
+		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
+			CreateCrossing(currX, currZ);
+		}
+	}
+
+	//Street Generator
+	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
+		for (float currZ = cityStart; currZ > -cityStart; currZ -= buildingDistance) {
+			//CreateRoadElement(currX, currZ);
+			CreateCrossing(currX, currZ);
+		}
+	}
+	for (float currX = cityStart; currX > -cityStart; currX -= buildingDistance) {
+		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
+			//CreateRoadElement(currX, currZ);
+			CreateCrossing(currX, currZ);
 		}
 	}
 
@@ -217,7 +231,7 @@ Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 	return tmpBuilding;
 }
 
-ObstacleType ModuleSceneIntro::CreateObstacle(float x, float z)
+ObstacleType ModuleSceneIntro::CreateCrossing(float x, float z)
 {
 	Cube tmpBuilding(5.0f, 10.0f, 5.0f);
 	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
