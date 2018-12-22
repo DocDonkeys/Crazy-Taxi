@@ -72,6 +72,9 @@ bool ModuleSceneIntro::Start()
 
 	test = App->physics->AddBody(*c2, 1.0f);*/
 
+	//Music:
+	App->audio->PlayMusic("audio/Yellow_Line.ogg");
+
 	return ret;
 }
 
