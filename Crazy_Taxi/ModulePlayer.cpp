@@ -85,13 +85,15 @@ update_status ModulePlayer::Update(float dt)
 	//	//Create a new vehicle with the position we stored from the previous car
 	//	CreatePlayer(pos.x,pos.y + 2,pos.z);
 
-		vec3 pos(vehicle->GetPosition());
+		/*vec3 pos(vehicle->GetPosition());
 
 		Cube helper(1,1,1);
 		car_fliper = App->physics->AddBody(helper, 100.0f);
 		car_fliper->SetPos(pos.x, pos.y - 10, pos.z + 1);
-		car_fliper->Push(0,5000.0f,0);
+		car_fliper->Push(0,5000.0f,0);*/
 
+		vehicle->Push(0, 5000.0f, 0);
+		App->physics->SetVehicleRotation(vehicle, 180);
 	}
 
 	if (vehicle->GetKmh() < 0.2 && vehicle->GetKmh() > -0.2f) {
