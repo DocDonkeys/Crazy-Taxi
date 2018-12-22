@@ -10,9 +10,39 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
-enum class ObstacleType
+enum class ObstacleType	//Unmovable, avoid
 {
 	NONE = -1,
+
+	//Crossings
+	FOUNTAIN,
+	POST,
+
+	//Roads
+	RAMP,
+	HOLE_RAMP,
+	WALL,
+	GROUND_BUMPS,
+	GROUND_BARRIERS,
+	LAMP_POSTS,
+	BUS_STOP,
+	BLOCK_CAR,
+
+	MAX_TYPES
+};
+
+enum class ObjectType	//Movable, collide
+{
+	NONE = -1,
+
+	PHONEBOX,
+	MAILBOX,
+	PARKED_CAR,
+	BOXES,
+	BARRIER,
+	SMALL_BARRIERS,
+	CONES,
+	SIGN,
 
 	MAX_TYPES
 };
@@ -42,7 +72,16 @@ public:
 
 private:
 	Cube* GenerateBuilding(float x, float z);
-	ObstacleType CreateCrossing(float x, float z);
+	ObstacleType GenerateCrossing(float x, float z);
+	ObstacleType GenerateRoad(float x, float z, bool xRoad);
+
+	void GeneratePhonebox();
+	void GenereateMailbox();
+	void GenerateBoxes();
+	void GenerateBarrier();
+	void GenerateSmallBarriers();
+	void GenerateCones();
+	void GenerateSign();
 
 public:
 	/*
