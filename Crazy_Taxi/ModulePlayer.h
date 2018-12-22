@@ -18,6 +18,7 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
+	void CreatePlayer(float x, float y, float z);
 
 public:
 

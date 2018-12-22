@@ -191,6 +191,14 @@ bool ModulePhysics3D::CleanUp()
 	return true;
 }
 
+void ModulePhysics3D::CleanVehicles()
+{
+	for (p2List_item<PhysVehicle3D*>* item = vehicles.getFirst(); item; item = item->next)
+		delete item->data;
+
+	vehicles.clear();
+}
+
 // ---------------------------------------------------------
 PhysBody3D* ModulePhysics3D::AddBody(const Sphere& sphere, float mass)
 {
