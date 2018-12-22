@@ -29,12 +29,12 @@ bool ModuleSceneIntro::Start()
 
 	//Stuff to test
 	Cube* CubeTest = new Cube(2, 1, 2);
-	CubeTest->SetPos(0, 2.5f, 0);
+	CubeTest->SetPos(0, 2.5f, 10);
 	CubeTest->color.Set(0, 200, 100);
 
 	c1 = CubeTest;
 	
-	test = App->physics->AddBody(*c1,1.0f);
+	test = App->physics->AddBody(*c1,0.0f);
 
 	//TESTING Didac
 	test->SetAsSensor(true);
