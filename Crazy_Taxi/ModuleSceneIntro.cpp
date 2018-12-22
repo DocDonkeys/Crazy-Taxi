@@ -59,7 +59,9 @@ bool ModuleSceneIntro::Start()
 	//Crossings Generator
 	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
 		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
-			GenerateCrossing(currX, currZ);
+			tmpCube = GenerateCrossing(currX, currZ);
+			//obstacles.add(tmpCube);
+			App->physics->AddBody(*tmpCube, 0.0f);
 		}
 	}
 
@@ -95,11 +97,17 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	//City cleanup
+	//City CleanUp
 	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
 		delete item->data;
 	}
 	buildings.clear();
+
+	//Obstacle CleanUp
+	for (p2List_item<Primitive*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
+		delete item->data;
+	}
+	obstacles.clear();
 
 	return true;
 }
@@ -126,6 +134,11 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//City Rendering
 	for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
+		item->data->Render();
+	}
+
+	//Obstacle Rendering
+	for (p2List_item<Primitive*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
 		item->data->Render();
 	}
 
@@ -222,20 +235,20 @@ Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 	green = (float)(rand() % 101) / 100.0f;
 	blue = (float)(rand() % 101) / 100.0f;
 
-	Cube* tmpBuilding = new Cube(buildData.baseSize, buildData.height, buildData.baseSize);
-	tmpBuilding->color.Set(red, green, blue);
-	tmpBuilding->SetPos(x, buildData.height/2, z);
+	Cube* tmpCube = new Cube(buildData.baseSize, buildData.height, buildData.baseSize);
+	tmpCube->color.Set(red, green, blue);
+	tmpCube->SetPos(x, buildData.height/2, z);
 
-	return tmpBuilding;
+	return tmpCube;
 }
 
-void ModuleSceneIntro::GenerateCrossing(float x, float z)
+Cube* ModuleSceneIntro::GenerateCrossing(float x, float z)
 {
-	Cube tmpBuilding(5.0f, 10.0f, 5.0f);
-	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
-	tmpBuilding.SetPos(x, 10.0f / 2, z);
+	Cube* tmpCube = new Cube(5.0f, 10.0f, 5.0f);
+	tmpCube->color.Set(1.0f, 1.0f, 1.0f);
+	tmpCube->SetPos(x, 10.0f / 2, z);
 
-	App->physics->AddBody(tmpBuilding, 0.0f);
+	return tmpCube;
 }
 
 RoadObstacle ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
@@ -312,7 +325,7 @@ void ModuleSceneIntro::GenerateHoleRamp(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateRamp(float x, float z, bool xRoad)
 {
-	Cube tmpBuilding(10.0f, 3.0f, 10.0f);
+	Cube* tmpCube = new Cube(23.0f, 3.0f, 23.0f);
 	vec3 vector;
 
 	if (xRoad == true) {
@@ -322,27 +335,79 @@ void ModuleSceneIntro::GenerateRamp(float x, float z, bool xRoad)
 		vector.Set(1.0f, 0.0f, 0.0f);
 	}
 
-	tmpBuilding.SetRotation(-20.0f, vector);
+	tmpCube->SetRotation(-10.0f, vector);
+	tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+	tmpCube->SetPos(x, 0.0f, z);
 
-	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
-	tmpBuilding.SetPos(x, 0.0f, z);
-
-	App->physics->AddBody(tmpBuilding, 0.0f);
+	obstacles.add(tmpCube);
+	App->physics->AddBody(*tmpCube, 0.0f);
 }
 
 void ModuleSceneIntro::GenerateWall(float x, float z, bool xRoad)
 {
+	Cube* tmpCube = new Cube;
+	vec3 vector;
 
+	if (xRoad == true) {
+		vector.Set(2.0f, 10.0f, 23.0f);
+		tmpCube->size = vector;
+	}
+	else {
+		vector.Set(23.0f, 10.0f, 2.0f);
+		tmpCube->size = vector;
+	}
+
+	tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+	tmpCube->SetPos(x, 5.0f, z);
+
+	obstacles.add(tmpCube);
+	App->physics->AddBody(*tmpCube, 0.0f);
 }
 
 void ModuleSceneIntro::GenerateGroundBumps(float x, float z, bool xRoad)
 {
-
+	if (xRoad == true) {
+		vec3 vector(0.0f, 1.0f, 0.0f);
+		for (int i = -1; i < 2; i++) {
+			Cylinder* tmpCylinder = new Cylinder(2.0f, 23.0f);
+			tmpCylinder->color.Set(1.0f, 0.0f, 0.0f);
+			tmpCylinder->SetPos(x + (15.0f * i), -0.9f, z);
+			tmpCylinder->transform.rotate(90.0, vector);
+			obstacles.add(tmpCylinder);
+			App->physics->AddBody(*tmpCylinder, 0.0f);
+		}
+	}
+	else {
+		for (int i = -1; i < 2; i++) {
+			Cylinder* tmpCylinder = new Cylinder(2.0f, 23.0f);
+			tmpCylinder->color.Set(1.0f, 0.0f, 0.0f);
+			tmpCylinder->SetPos(x, -0.9f, z + (15.0f * i));
+			obstacles.add(tmpCylinder);
+			App->physics->AddBody(*tmpCylinder, 0.0f);
+		}
+	};
 }
 
 void ModuleSceneIntro::GenerateGroundBarriers(float x, float z, bool xRoad)
 {
-
+	if (xRoad == true) {
+		for (int i = -1; i < 2; i += 2) {
+			Cube* tmpCube = new Cube(2.0f, 3.0f, 14.0f);
+			tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+			tmpCube->SetPos(x + (10.0f * i), 1.5f, z + (8.0f * i));
+			obstacles.add(tmpCube);
+			App->physics->AddBody(*tmpCube, 0.0f);
+		}
+	}
+	else {
+		for (int i = -1; i < 2; i += 2) {
+			Cube* tmpCube = new Cube(14.0f, 3.0f, 2.0f);
+			tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+			tmpCube->SetPos(x + (8.0f * i), 1.5f, z + (10.0f * i));
+			obstacles.add(tmpCube);
+			App->physics->AddBody(*tmpCube, 0.0f);
+		}
+	}
 }
 
 void ModuleSceneIntro::GenerateLampPosts(float x, float z, bool xRoad)

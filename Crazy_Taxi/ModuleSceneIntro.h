@@ -66,7 +66,7 @@ public:
 
 private:
 	Cube* GenerateBuilding(float x, float z);
-	void GenerateCrossing(float x, float z);
+	Cube* GenerateCrossing(float x, float z);
 	RoadObstacle GenerateRoad(float x, float z, bool xRoad);
 
 	void GenerateRamp(float x, float z, bool xRoad);
@@ -124,7 +124,8 @@ public:
 	//Carles
 	CityData buildData;
 	p2List<Cube*> buildings;
-	Cube* c2;
+	p2List<Primitive*> obstacles;
+	p2List<Primitive*> objects;
 
 	Timer disco;	//BPM 140 (2.33333 BPS)
 	Uint32 discoDelay = 428;
