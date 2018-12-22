@@ -32,8 +32,8 @@ public:
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 private:
-	Cube* GenerateBuilding(int x, int z);
-	ObstacleType CreateObstacle(int x, int z);
+	Cube* GenerateBuilding(float x, float z);
+	ObstacleType CreateObstacle(float x, float z);
 
 public:
 	/*

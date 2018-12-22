@@ -50,12 +50,12 @@ bool ModuleSceneIntro::Start()
 
 	Cube* tmpCube;
 
-	srand(time(NULL));
+	srand((uint)time(NULL));
 	for (float currX = limitX; currX > -limitX; currX -= spaceBetween) {
 		for (float currZ = limitZ; currZ > -limitZ; currZ -= spaceBetween) {
 			tmpCube = GenerateBuilding(currX, currZ);
 			buildings.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 100000.0f);
+			App->physics->AddBody(*tmpCube, 0.0f);
 		}
 	}
 
@@ -204,7 +204,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	}
 }
 
-Cube* ModuleSceneIntro::GenerateBuilding(int x, int z)
+Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 {
 	float height = (float)(rand() % (100 - 10 + 1) + 10);
 
@@ -219,13 +219,13 @@ Cube* ModuleSceneIntro::GenerateBuilding(int x, int z)
 	return tmpBuilding;
 }
 
-ObstacleType ModuleSceneIntro::CreateObstacle(int x, int z)
+ObstacleType ModuleSceneIntro::CreateObstacle(float x, float z)
 {
 	Cube tmpBuilding(5.0f, 10.0f, 5.0f);
 	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
 	tmpBuilding.SetPos(x, 10.0f / 2, z);
 
-	App->physics->AddBody(tmpBuilding, 100000.0f);
+	App->physics->AddBody(tmpBuilding, 0.0f);
 
 	return ObstacleType::NONE;
 }
