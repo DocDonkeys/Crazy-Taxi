@@ -59,21 +59,19 @@ bool ModuleSceneIntro::Start()
 	//Crossings Generator
 	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
 		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
-			CreateCrossing(currX, currZ);
+			GenerateCrossing(currX, currZ);
 		}
 	}
 
 	//Street Generator
 	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
 		for (float currZ = cityStart; currZ > -cityStart; currZ -= buildingDistance) {
-			//CreateRoadElement(currX, currZ);
-			CreateCrossing(currX, currZ);
+			GenerateRoad(currX, currZ, false);
 		}
 	}
 	for (float currX = cityStart; currX > -cityStart; currX -= buildingDistance) {
 		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
-			//CreateRoadElement(currX, currZ);
-			CreateCrossing(currX, currZ);
+			GenerateRoad(currX, currZ, true);
 		}
 	}
 
@@ -231,7 +229,7 @@ Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 	return tmpBuilding;
 }
 
-ObstacleType ModuleSceneIntro::CreateCrossing(float x, float z)
+ObstacleType ModuleSceneIntro::GenerateCrossing(float x, float z)
 {
 	Cube tmpBuilding(5.0f, 10.0f, 5.0f);
 	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
@@ -240,4 +238,63 @@ ObstacleType ModuleSceneIntro::CreateCrossing(float x, float z)
 	App->physics->AddBody(tmpBuilding, 0.0f);
 
 	return ObstacleType::NONE;
+}
+
+ObstacleType ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
+{
+	ObstacleType ret = ObstacleType::NONE;
+
+	Cube tmpBuilding(10.0f, 3.0f, 10.0f);
+	vec3 vector;
+
+	if (xRoad == true) {
+		vector.Set(0.0f, 0.0f, 1.0f);
+	}
+	else {
+		vector.Set(1.0f, 0.0f, 0.0f);
+	}
+
+	tmpBuilding.SetRotation(-20.0f, vector);
+
+	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
+	tmpBuilding.SetPos(x, 0.0f, z);
+
+	App->physics->AddBody(tmpBuilding, 0.0f);
+
+	return ret;
+}
+
+void ModuleSceneIntro::GeneratePhonebox()
+{
+
+}
+
+void ModuleSceneIntro::GenereateMailbox()
+{
+
+}
+
+void ModuleSceneIntro::GenerateBoxes()
+{
+
+}
+
+void ModuleSceneIntro::GenerateBarrier()
+{
+
+}
+
+void ModuleSceneIntro::GenerateSmallBarriers()
+{
+
+}
+
+void ModuleSceneIntro::GenerateCones()
+{
+
+}
+
+void ModuleSceneIntro::GenerateSign()
+{
+
 }
