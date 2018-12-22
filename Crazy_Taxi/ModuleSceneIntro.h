@@ -17,6 +17,15 @@ enum class ObstacleType
 	MAX_TYPES
 };
 
+struct CityData {
+	float baseSize = 50.0f;
+	float height;
+	float maxHeight = 150.0f;
+	float minHeight = 20.0f;
+	float roadSize = 30.0f;
+	int randHeight = (int)(maxHeight - minHeight) + 1;
+};
+
 //CHANGE/FIX DIDAC
 
 class ModuleSceneIntro : public Module
@@ -70,8 +79,7 @@ public:
 	Cube* c1;
 
 	//Carles
-	float buildingSize = 50.0f;
-	float spaceBetween = buildingSize + 30.0f;
+	CityData buildData;
 	p2List<Cube*> buildings;
 	Cube* c2;
 

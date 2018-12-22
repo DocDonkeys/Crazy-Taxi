@@ -42,25 +42,23 @@ bool ModuleSceneIntro::Start()
 	
 
 	//Test Carles
-	float limitX = 300.0f;
-	float limitZ = 300.0f;
-
-	float obstacleLimitX = limitX + spaceBetween / 2;
-	float obstacleLimitZ = limitZ + spaceBetween / 2;
+	float cityRadius = 300.0f;
+	float buildingDistance = buildData.baseSize + buildData.roadSize;
+	float crossings = cityRadius + buildingDistance / 2;
 
 	Cube* tmpCube;
 
 	srand((uint)time(NULL));
-	for (float currX = limitX; currX > -limitX; currX -= spaceBetween) {
-		for (float currZ = limitZ; currZ > -limitZ; currZ -= spaceBetween) {
+	for (float currX = cityRadius; currX > -cityRadius; currX -= buildingDistance) {
+		for (float currZ = cityRadius; currZ > -cityRadius; currZ -= buildingDistance) {
 			tmpCube = GenerateBuilding(currX, currZ);
 			buildings.add(tmpCube);
 			App->physics->AddBody(*tmpCube, 0.0f);
 		}
 	}
 
-	for (float currX = obstacleLimitX; currX > -obstacleLimitX; currX -= spaceBetween) {
-		for (float currZ = obstacleLimitX; currZ > -obstacleLimitX; currZ -= spaceBetween) {
+	for (float currX = crossings; currX > -crossings; currX -= buildingDistance) {
+		for (float currZ = crossings; currZ > -crossings; currZ -= buildingDistance) {
 			CreateObstacle(currX, currZ);
 		}
 	}
@@ -206,15 +204,15 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 {
-	float height = (float)(rand() % (100 - 10 + 1) + 10);
+	buildData.height = (float)(rand() % buildData.randHeight) + buildData.minHeight;
 
 	red = (float)(rand() % 101) / 100.0f;
 	green = (float)(rand() % 101) / 100.0f;
 	blue = (float)(rand() % 101) / 100.0f;
 
-	Cube* tmpBuilding = new Cube(buildingSize, height, buildingSize);
+	Cube* tmpBuilding = new Cube(buildData.baseSize, buildData.height, buildData.baseSize);
 	tmpBuilding->color.Set(red, green, blue);
-	tmpBuilding->SetPos(x, height/2, z);
+	tmpBuilding->SetPos(x, buildData.height/2, z);
 
 	return tmpBuilding;
 }
