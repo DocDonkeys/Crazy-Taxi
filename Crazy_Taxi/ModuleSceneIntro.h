@@ -72,10 +72,11 @@ public:
 	//Carles
 	float buildingSize = 50.0f;
 	float spaceBetween = buildingSize + 30.0f;
-	int discoTime = 0;
-	int discoLimit = 20;
 	p2List<Cube*> buildings;
 	Cube* c2;
+
+	Timer disco;	//BPM 140 (2.33333 BPS)
+	Uint32 discoDelay = 428;
 
 private:
 	//Cube* GenerateBuilding();

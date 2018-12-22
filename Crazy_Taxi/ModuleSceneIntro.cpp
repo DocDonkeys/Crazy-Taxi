@@ -74,6 +74,8 @@ bool ModuleSceneIntro::Start()
 
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
+	App->audio->SetMusicVolume(30);
+	disco.Start();
 
 	return ret;
 }
@@ -102,7 +104,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	c1->Render();
 
 	//Check Disco Update
-	if (discoTime > discoLimit) {
+	if (disco.Read() > discoDelay) {
 		float red;
 		float green;
 		float blue;
@@ -113,10 +115,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			blue = (float)(rand() % 101) / 100.0f;
 			item->data->color.Set(red, green, blue);
 		}
-		discoTime = 0;
-	}
-	else {
-		discoTime++;
+		disco.Start();
 	}
 
 	//City Rendering
