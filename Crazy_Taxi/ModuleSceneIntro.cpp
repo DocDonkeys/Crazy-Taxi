@@ -229,21 +229,89 @@ Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 	return tmpBuilding;
 }
 
-ObstacleType ModuleSceneIntro::GenerateCrossing(float x, float z)
+void ModuleSceneIntro::GenerateCrossing(float x, float z)
 {
 	Cube tmpBuilding(5.0f, 10.0f, 5.0f);
 	tmpBuilding.color.Set(1.0f, 1.0f, 1.0f);
 	tmpBuilding.SetPos(x, 10.0f / 2, z);
 
 	App->physics->AddBody(tmpBuilding, 0.0f);
-
-	return ObstacleType::NONE;
 }
 
-ObstacleType ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
+RoadObstacle ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
 {
-	ObstacleType ret = ObstacleType::NONE;
+	RoadObstacle obstacle = (RoadObstacle)(rand() % (int)RoadObstacle::MAX_TYPES);
 
+	switch (obstacle) {
+	case RoadObstacle::RAMP:
+		GenerateRamp(x, z, xRoad);
+		break;
+	case RoadObstacle::HOLE_RAMP:
+		GenerateHoleRamp(x, z, xRoad);
+		break;
+	case RoadObstacle::WALL:
+		GenerateWall(x, z, xRoad);
+		break;
+	case RoadObstacle::GROUND_BUMPS:
+		GenerateGroundBumps(x, z, xRoad);
+		break;
+	case RoadObstacle::GROUND_BARRIERS:
+		GenerateGroundBarriers(x, z, xRoad);
+		break;
+	case RoadObstacle::LAMP_POSTS:
+		GenerateLampPosts(x, z, xRoad);
+		break;
+	case RoadObstacle::BUS_STOP:
+		GenerateBusStop(x, z, xRoad);
+		break;
+	case RoadObstacle::BLOCK_CAR:
+		GenerateBlockCar(x, z, xRoad);
+		break;
+	case RoadObstacle::DYNAMIC_OBJECT:
+		GenerateObject(x, z, xRoad);
+		break;
+	}
+
+	return obstacle;
+}
+
+void ModuleSceneIntro::GenerateObject(float x, float z, bool xRoad)
+{
+	ObjectType object = (ObjectType)(rand() % (int)ObjectType::MAX_TYPES);
+	switch (object) {
+	case ObjectType::PHONEBOX:
+		GeneratePhonebox(x, z, xRoad);
+		break;
+	case ObjectType::MAILBOX:
+		GenereateMailbox(x, z, xRoad);
+		break;
+	case ObjectType::BOXES:
+		GenerateBoxes(x, z, xRoad);
+		break;
+	case ObjectType::BARRIER:
+		GenerateBarrier(x, z, xRoad);
+		break;
+	case ObjectType::SMALL_BARRIERS:
+		GenerateSmallBarriers(x, z, xRoad);
+		break;
+	case ObjectType::CONES:
+		GenerateCones(x, z, xRoad);
+		break;
+	case ObjectType::SIGN:
+		GenerateSign(x, z, xRoad);
+		break;
+	case ObjectType::NONE:
+		break;
+	}
+}
+
+void ModuleSceneIntro::GenerateHoleRamp(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenerateRamp(float x, float z, bool xRoad)
+{
 	Cube tmpBuilding(10.0f, 3.0f, 10.0f);
 	vec3 vector;
 
@@ -260,41 +328,70 @@ ObstacleType ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
 	tmpBuilding.SetPos(x, 0.0f, z);
 
 	App->physics->AddBody(tmpBuilding, 0.0f);
-
-	return ret;
 }
 
-void ModuleSceneIntro::GeneratePhonebox()
+void ModuleSceneIntro::GenerateWall(float x, float z, bool xRoad)
 {
 
 }
 
-void ModuleSceneIntro::GenereateMailbox()
+void ModuleSceneIntro::GenerateGroundBumps(float x, float z, bool xRoad)
 {
 
 }
 
-void ModuleSceneIntro::GenerateBoxes()
+void ModuleSceneIntro::GenerateGroundBarriers(float x, float z, bool xRoad)
 {
 
 }
 
-void ModuleSceneIntro::GenerateBarrier()
+void ModuleSceneIntro::GenerateLampPosts(float x, float z, bool xRoad)
 {
 
 }
 
-void ModuleSceneIntro::GenerateSmallBarriers()
+void ModuleSceneIntro::GenerateBusStop(float x, float z, bool xRoad)
 {
 
 }
 
-void ModuleSceneIntro::GenerateCones()
+void ModuleSceneIntro::GenerateBlockCar(float x, float z, bool xRoad)
 {
 
 }
 
-void ModuleSceneIntro::GenerateSign()
+
+void ModuleSceneIntro::GeneratePhonebox(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenereateMailbox(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenerateBoxes(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenerateBarrier(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenerateSmallBarriers(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenerateCones(float x, float z, bool xRoad)
+{
+
+}
+
+void ModuleSceneIntro::GenerateSign(float x, float z, bool xRoad)
 {
 
 }

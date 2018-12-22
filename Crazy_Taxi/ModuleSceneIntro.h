@@ -10,15 +10,10 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
-enum class ObstacleType	//Unmovable, avoid
+enum class RoadObstacle	//Unmovable, avoid
 {
-	NONE = -1,
+	DYNAMIC_OBJECT,	//Create object if NONE
 
-	//Crossings
-	FOUNTAIN,
-	POST,
-
-	//Roads
 	RAMP,
 	HOLE_RAMP,
 	WALL,
@@ -33,11 +28,10 @@ enum class ObstacleType	//Unmovable, avoid
 
 enum class ObjectType	//Movable, collide
 {
-	NONE = -1,
+	NONE,	//Create nothing
 
 	PHONEBOX,
 	MAILBOX,
-	PARKED_CAR,
 	BOXES,
 	BARRIER,
 	SMALL_BARRIERS,
@@ -72,16 +66,26 @@ public:
 
 private:
 	Cube* GenerateBuilding(float x, float z);
-	ObstacleType GenerateCrossing(float x, float z);
-	ObstacleType GenerateRoad(float x, float z, bool xRoad);
+	void GenerateCrossing(float x, float z);
+	RoadObstacle GenerateRoad(float x, float z, bool xRoad);
 
-	void GeneratePhonebox();
-	void GenereateMailbox();
-	void GenerateBoxes();
-	void GenerateBarrier();
-	void GenerateSmallBarriers();
-	void GenerateCones();
-	void GenerateSign();
+	void GenerateRamp(float x, float z, bool xRoad);
+	void GenerateHoleRamp(float x, float z, bool xRoad);
+	void GenerateWall(float x, float z, bool xRoad);
+	void GenerateGroundBumps(float x, float z, bool xRoad);
+	void GenerateGroundBarriers(float x, float z, bool xRoad);
+	void GenerateLampPosts(float x, float z, bool xRoad);
+	void GenerateBusStop(float x, float z, bool xRoad);
+	void GenerateBlockCar(float x, float z, bool xRoad);
+
+	void GenerateObject(float x, float z, bool xRoad);
+	void GeneratePhonebox(float x, float z, bool xRoad);
+	void GenereateMailbox(float x, float z, bool xRoad);
+	void GenerateBoxes(float x, float z, bool xRoad);
+	void GenerateBarrier(float x, float z, bool xRoad);
+	void GenerateSmallBarriers(float x, float z, bool xRoad);
+	void GenerateCones(float x, float z, bool xRoad);
+	void GenerateSign(float x, float z, bool xRoad);
 
 public:
 	/*
