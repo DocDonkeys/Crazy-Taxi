@@ -105,10 +105,6 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//Check Disco Update
 	if (disco.Read() > discoDelay) {
-		float red;
-		float green;
-		float blue;
-
 		for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
 			red = (float)(rand() % 101) / 100.0f;
 			green = (float)(rand() % 101) / 100.0f;
@@ -212,9 +208,9 @@ Cube* ModuleSceneIntro::GenerateBuilding(int x, int z)
 {
 	float height = (float)(rand() % (100 - 10 + 1) + 10);
 
-	float red = (float)(rand() % 101) / 100.0f;
-	float green = (float)(rand() % 101) / 100.0f;
-	float blue = (float)(rand() % 101) / 100.0f;
+	red = (float)(rand() % 101) / 100.0f;
+	green = (float)(rand() % 101) / 100.0f;
+	blue = (float)(rand() % 101) / 100.0f;
 
 	Cube* tmpBuilding = new Cube(buildingSize, height, buildingSize);
 	tmpBuilding->color.Set(red, green, blue);

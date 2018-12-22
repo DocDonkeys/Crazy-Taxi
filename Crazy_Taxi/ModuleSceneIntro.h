@@ -77,6 +77,7 @@ public:
 
 	Timer disco;	//BPM 140 (2.33333 BPS)
 	Uint32 discoDelay = 428;
+	float red, green, blue;
 
 private:
 	//Cube* GenerateBuilding();
