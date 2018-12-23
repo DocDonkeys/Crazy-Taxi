@@ -775,7 +775,34 @@ void ModuleSceneIntro::GenerateSign(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateWreckingBall(float x, float z, bool xRoad)
 {
+	vec3 cord;
 
+	Obstacle* support = new Obstacle;
+	support->shape = new Sphere(0.1f);
+	support->shape->SetPos(x, 44.3f, z);
+	support->shape->color.Set(1.0f, 0.0f, 0.0f);
+
+	Obstacle* ball = new Obstacle;
+	ball->shape = new Sphere(4.0f);
+	ball->shape->color.Set(0.0f, 0.0f, 0.0f);
+	ball->dynamic = true;
+
+	if (xRoad == true) {
+		ball->shape->SetPos(x + 40.0f, 60.0f, z);
+		cord.Set(-40.0f, 0.0f, 0.0f);
+	}
+	else {
+		ball->shape->SetPos(x, 40.0f, z + 40.0f);
+		cord.Set(0.0f, 0.0f, -40.0f);
+	}
+	
+	support->body = App->physics->AddBody(*(Sphere*)support->shape, 0.0f);
+	ball->body = App->physics->AddBody(*(Sphere*)ball->shape, 10000.0f);
+
+	obstacles.add(support);
+	obstacles.add(ball);
+
+	App->physics->AddConstraintP2P(*support->body, *ball->body, vec3(0.0f, 0.0f, 0.0f), cord);
 }
 
 void ModuleSceneIntro::ChooseGameplayGoals()
