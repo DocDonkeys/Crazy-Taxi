@@ -10,7 +10,7 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
-enum class RoadObstacle	//Unmovable, avoid
+enum class ObstacleType	//Unmovable, avoid
 {
 	NONE,
 
@@ -33,6 +33,12 @@ enum class RoadObstacle	//Unmovable, avoid
 	SIGN,
 
 	MAX_TYPES
+};
+
+struct Obstacle
+{
+	PhysBody3D* body;
+	Primitive* shape;
 };
 
 struct BuildingData 
@@ -89,7 +95,7 @@ private:
 
 	Cube* GenerateBuilding(float x, float z);
 	TaxiStop* GenerateGoal(float x, float z);
-	RoadObstacle GenerateObstacle(float x, float z, bool xRoad);
+	ObstacleType GenerateObstacle(float x, float z, bool xRoad);
 
 	void GenerateRamp(float x, float z, bool xRoad);
 	void GenerateHoleRamp(float x, float z, bool xRoad);

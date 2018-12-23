@@ -265,19 +265,19 @@ int ModuleSceneIntro::CreateCityGoals()
 int ModuleSceneIntro::CreateCityObstacles()
 {
 	int counter = 0;
-	RoadObstacle ret;
+	ObstacleType ret;
 
 	for (float currX = city.roadStart; currX > -city.roadStart; currX -= city.buildingDistance) {
 		for (float currZ = city.cityStart; currZ > -city.cityStart; currZ -= city.buildingDistance) {
 			ret = GenerateObstacle(currX, currZ, false);
-			if (ret != RoadObstacle::NONE)
+			if (ret != ObstacleType::NONE)
 				counter++;
 		}
 	}
 	for (float currX = city.cityStart; currX > -city.cityStart; currX -= city.buildingDistance) {
 		for (float currZ = city.roadStart; currZ > -city.roadStart; currZ -= city.buildingDistance) {
 			GenerateObstacle(currX, currZ, true);
-			if (ret != RoadObstacle::NONE)
+			if (ret != ObstacleType::NONE)
 				counter++;
 		}
 	}
@@ -310,54 +310,54 @@ TaxiStop* ModuleSceneIntro::GenerateGoal(float x, float z)
 	return stop;
 }
 
-RoadObstacle ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
+ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 {
-	RoadObstacle obstacle = (RoadObstacle)(rand() % (int)RoadObstacle::MAX_TYPES);
+	ObstacleType obstacle = (ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
 
 	switch (obstacle)
 	{
 	//Unmovable
-	case RoadObstacle::NONE:
+	case ObstacleType::NONE:
 		break;
-	case RoadObstacle::RAMP:
+	case ObstacleType::RAMP:
 		GenerateRamp(x, z, xRoad);
 		break;
-	case RoadObstacle::HOLE_RAMP:
+	case ObstacleType::HOLE_RAMP:
 		GenerateHoleRamp(x, z, xRoad);
 		break;
-	case RoadObstacle::WALL:
+	case ObstacleType::WALL:
 		GenerateWall(x, z, xRoad);
 		break;
-	case RoadObstacle::GROUND_BUMPS:
+	case ObstacleType::GROUND_BUMPS:
 		GenerateGroundBumps(x, z, xRoad);
 		break;
-	case RoadObstacle::GROUND_BARRIERS:
+	case ObstacleType::GROUND_BARRIERS:
 		GenerateGroundBarriers(x, z, xRoad);
 		break;
-	case RoadObstacle::LAMP_POSTS:
+	case ObstacleType::LAMP_POSTS:
 		GenerateLampPosts(x, z, xRoad);
 		break;
-	case RoadObstacle::BARRIER:
+	case ObstacleType::BARRIER:
 		GenerateBarrier(x, z, xRoad);
 		break;
 	
 	//Movable
-	case RoadObstacle::BENCHES:
+	case ObstacleType::BENCHES:
 		GenerateBenches(x, z, xRoad);
 		break;
-	case RoadObstacle::MAILBOX:
+	case ObstacleType::MAILBOX:
 		GenereateMailbox(x, z, xRoad);
 		break;
-	case RoadObstacle::BOXES:
+	case ObstacleType::BOXES:
 		GenerateBoxes(x, z, xRoad);
 		break;
-	case RoadObstacle::SMALL_BARRIERS:
+	case ObstacleType::SMALL_BARRIERS:
 		GenerateSmallBarriers(x, z, xRoad);
 		break;
-	case RoadObstacle::CONES:
+	case ObstacleType::CONES:
 		GenerateCones(x, z, xRoad);
 		break;
-	case RoadObstacle::SIGN:
+	case ObstacleType::SIGN:
 		GenerateSign(x, z, xRoad);
 		break;
 	}
