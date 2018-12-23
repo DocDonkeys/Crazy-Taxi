@@ -72,21 +72,20 @@ bool ModuleSceneIntro::Start()
 	//TESTING DIDAC
 	for (int i = 0; i < 5; ++i)
 	{
-		game_destinations[i]->pole->color.Set(1.0f, 1.0f, 0);
-		game_destinations[i]->sign->color.Set(1.0f, 1.0f, 0);
+		/*game_destinations[i]->pole->color.Set(1.0f, 1.0f, 0);
+		game_destinations[i]->sign->color.Set(1.0f, 1.0f, 0);*/
 
 		//Place Test sensor in all of the Taxi Stops
-		vec3 pos = game_destinations[i]->pole->GetPosition();
-		Cube sensor(8,4,8);
-		sensor.SetPos(pos.x,pos.y - 2.5,pos.z);
-		taxiStops_sensors.add(App->physics->AddBody(sensor,0.0f));
+		taxiStop_positions[i] = game_destinations[i]->pole->GetPosition();
 	}
-
-	for (p2List_item<PhysBody3D*>* item = taxiStops_sensors.getFirst(); item != nullptr; item = item->next)
-	{
-		item->data->SetAsSensor(true);
-		item->data->collision_listeners.add(App->scene_intro);
-	}
+	game_destinations[0]->pole->color.Set(1.0f,1.0f,0.0f);
+	game_destinations[0]->sign->color.Set(1.0f, 1.0f, 0.0f);
+	//Place Test sensor in all of the Taxi Stops
+	Cube sensor(8, 4, 8);
+	sensor.SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5, taxiStop_positions[nextStop].z);
+	taxiStop_sensor = App->physics->AddBody(sensor, 0.0f);
+	taxiStop_sensor->SetAsSensor(true);
+	taxiStop_sensor->collision_listeners.add(App->scene_intro);
 
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
@@ -128,6 +127,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+
+	Cube ground(800, 1, 800);
+	ground.SetPos(0,-0.5,0);
+	ground.color.Set(0.2f,0.2f,0.2f);
+	ground.Render();
 
 	c1->Render();
 
@@ -209,7 +213,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 
 	//HERE WE MIGHT HAVE IT BOIIIIIIIIIIIIIIII
-	vec3 objPos(15, 1, 30);
+	vec3 objPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y, taxiStop_positions[nextStop].z);
 
 	distance_x = objPos.x - arrowpos.x;
 	
@@ -230,6 +234,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	//arrowtest.transform.M[6] = angle;
 	arrowtest.Render();
 
+
 	//CHANGE/FIX ARROWTEST ENDS HERE
 
 	return UPDATE_CONTINUE;
@@ -237,9 +242,18 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if (body1 == test)
+	if (body1 == taxiStop_sensor)
 	{
-		int workpls = 1;
+		nextStop++;
+		if (nextStop < 5)
+		{
+			game_destinations[nextStop - 1]->pole->color.Set(1.0f, 1.0f, 1.0f);
+			game_destinations[nextStop - 1]->sign->color.Set(1.0f, 1.0f, 1.0f);
+
+			taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y-2.5f, taxiStop_positions[nextStop].z);
+			game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
+			game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
+		}
 	}
 	int workpls = 1;
 }
