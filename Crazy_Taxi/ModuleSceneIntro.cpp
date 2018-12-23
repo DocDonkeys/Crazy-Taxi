@@ -579,3 +579,28 @@ void ModuleSceneIntro::GenerateSign(float x, float z, bool xRoad)
 {
 
 }
+
+
+void ModuleSceneIntro::ChooseGameplayGoals()
+{
+	int indexes[5];
+	for (int i = 0; i < 5; ++i)
+	{
+		indexes[i] = (rand() % goals.count());
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			if (!(indexes[i] != indexes[j]) && i != j)
+			{
+				indexes[i] = (rand() % goals.count());
+				i = 0;
+				j = 0;
+				break;
+			}
+		}
+	}
+
+}

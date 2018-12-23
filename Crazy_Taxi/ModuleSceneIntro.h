@@ -106,6 +106,8 @@ private:
 	void GenerateCones(float x, float z, bool xRoad);
 	void GenerateSign(float x, float z, bool xRoad);
 
+	void ChooseGameplayGoals();
+
 public:
 	/*
 	PhysBody3D* pb_snake[MAX_SNAKE];
@@ -151,4 +153,8 @@ public:
 	Timer disco;	//BPM 140 (2.33333 BPS)
 	Uint32 discoDelay = 428;
 	float red, green, blue;
+
+
+
+	TaxiStop* game_destinations[5];
 };
