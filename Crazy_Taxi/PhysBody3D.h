@@ -2,6 +2,7 @@
 #define __PhysBody3D_H__
 
 #include "p2List.h"
+#include "glmath.h"
 
 class btRigidBody;
 class Module;
@@ -21,6 +22,7 @@ public:
 	
 	//Function to Set the rigidbody as a Sensor
 	void SetAsSensor(bool is_sensor);
+	vec3 GetPosition();
 
 private:
 	btRigidBody* body = nullptr;
