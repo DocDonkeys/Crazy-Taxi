@@ -20,8 +20,6 @@ enum class RoadObstacle	//Unmovable, avoid
 	GROUND_BUMPS,
 	GROUND_BARRIERS,
 	LAMP_POSTS,
-	BUS_STOP,
-	BLOCK_CAR,
 
 	MAX_TYPES
 };
@@ -90,11 +88,8 @@ private:
 	void GenerateGroundBumps(float x, float z, bool xRoad);
 	void GenerateGroundBarriers(float x, float z, bool xRoad);
 	void GenerateLampPosts(float x, float z, bool xRoad);
-	void GenerateBusStop(float x, float z, bool xRoad);
-	void GenerateBlockCar(float x, float z, bool xRoad);
 
 	void GenerateObject(float x, float z, bool xRoad);
-	void GeneratePhonebox(float x, float z, bool xRoad);
 	void GenereateMailbox(float x, float z, bool xRoad);
 	void GenerateBoxes(float x, float z, bool xRoad);
 	void GenerateBarrier(float x, float z, bool xRoad);
