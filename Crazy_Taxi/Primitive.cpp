@@ -17,6 +17,17 @@ PrimitiveTypes Primitive::GetType() const
 	return type;
 }
 
+vec3 Primitive::GetPosition()
+{
+	vec3 pos;
+
+	pos.x = transform[12];
+	pos.y = transform[13];
+	pos.z = transform[14];
+
+	return pos;
+}
+
 //CHANGE/FIX Functions copied from camera
 void Primitive::LookAt(const vec3 & Pos,const vec3 & Spot)
 {

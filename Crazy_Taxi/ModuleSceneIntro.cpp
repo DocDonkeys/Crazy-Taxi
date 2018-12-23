@@ -68,6 +68,26 @@ bool ModuleSceneIntro::Start()
 
 	//Choose the TaxiStops that will be used in the game
 	ChooseGameplayGoals();
+
+	//TESTING DIDAC
+	for (int i = 0; i < 5; ++i)
+	{
+		game_destinations[i]->pole->color.Set(1.0f, 1.0f, 0);
+		game_destinations[i]->sign->color.Set(1.0f, 1.0f, 0);
+
+		//Place Test sensor in all of the Taxi Stops
+		vec3 pos = game_destinations[i]->pole->GetPosition();
+		Cube sensor(8,4,8);
+		sensor.SetPos(pos.x,pos.y - 2.5,pos.z);
+		taxiStops_sensors.add(App->physics->AddBody(sensor,0.0f));
+	}
+
+	for (p2List_item<PhysBody3D*>* item = taxiStops_sensors.getFirst(); item != nullptr; item = item->next)
+	{
+		item->data->SetAsSensor(true);
+		item->data->collision_listeners.add(App->scene_intro);
+	}
+
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
 	App->audio->SetMusicVolume(30);
@@ -219,8 +239,9 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if (body1 == test)
 	{
-		
+		int workpls = 1;
 	}
+	int workpls = 1;
 }
 
 int ModuleSceneIntro::CreateCityBuildings()
@@ -623,5 +644,4 @@ void ModuleSceneIntro::ChooseGameplayGoals()
 	{
 		goals.at(indexes[i], game_destinations[i]);
 	}
-
 }
