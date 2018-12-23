@@ -92,17 +92,21 @@ bool ModuleSceneIntro::Start()
 	arrowtest.radius = 0.5;
 	arrowtest.height = 3;
 
-	arrow_cylinder = App->physics->AddBody(arrowtest,0.0f);
+	arrow_cylinder = App->physics->AddBody(arrowtest, 0.0f);
 
 	arrow_cube.Scale(0.5f,0.5f,0.5f);
 	arrow_cube.color.Set(0, 1.0f, 0);
 
-	arrow_end = App->physics->AddBody(arrow_cube, 0.0f);
+	arrow_end = App->physics->AddBody(arrow_cube, 10.0f);
+	
+	//arrowtest.SetPos(15.0f, 10.0f, 15.0f);
+	//arrow_cylinder->SetPos(15.0f, 10.0f, 15.0f);
 
-	arrow_cylinder->SetPos(0,0,0);
-	arrow_end->SetPos(1.5f,0,0);
+	arrow_end->SetPos(15.0f, 15.0f, 15.0f);
+	arrow_cube.SetPos(15.0f, 10.0f, 15.0f);
+	arrow_end->SetAsSensor(true);
 
-	App->physics->AddConstraintP2P(*arrow_cylinder, *arrow_end,vec3(-1.5f,0,0),vec3(0,0,0));
+	App->physics->AddConstraintP2P(*arrow_cylinder, *arrow_end, vec3(1.5f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f));
 	
 
 	//Music:
@@ -226,7 +230,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 
 	
-
 	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 	arrow_cylinder->SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 	//arrowtest.SetRotation(angle,vec3(x,y,z));
@@ -379,7 +382,7 @@ TaxiStop* ModuleSceneIntro::GenerateGoal(float x, float z)
 
 ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 {
-	ObstacleType obstacle = ObstacleType::WRECKING_BALL;//(ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
+	ObstacleType obstacle = ObstacleType::NONE;//(ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
 
 	switch (obstacle)
 	{
