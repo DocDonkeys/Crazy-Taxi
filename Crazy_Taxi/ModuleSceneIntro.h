@@ -39,6 +39,7 @@ struct Obstacle
 {
 	PhysBody3D* body;
 	Primitive* shape;
+	bool dynamic = false;
 
 	~Obstacle() {
 		delete shape;

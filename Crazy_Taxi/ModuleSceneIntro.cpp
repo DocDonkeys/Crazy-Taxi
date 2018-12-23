@@ -149,6 +149,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//Obstacle Rendering
 	for (p2List_item<Obstacle*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
+		if (item->data->dynamic) {
+			item->data->body->GetTransform(&item->data->shape->transform);
+		}
 		item->data->shape->Render();
 	}
 
@@ -599,7 +602,22 @@ void ModuleSceneIntro::GenereateMailbox(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateBoxes(float x, float z, bool xRoad)
 {
+	Obstacle* box = new Obstacle;
 
+	if (xRoad == true) {
+		box->shape = new Cube(5.0f, 5.0f, 5.0f);
+		box->shape->SetPos(x, 2.5f, z);
+	}
+	else {
+		box->shape = new Cube(5.0f, 5.0f, 5.0f);
+		box->shape->SetPos(x, 2.5f, z);
+	}
+
+	box->shape->color.Set(0.0f, 1.0f, 0.0f);
+	box->dynamic = true;
+
+	box->body = App->physics->AddBody(*(Cube*)box->shape, 10.0f);
+	obstacles.add(box);
 }
 
 void ModuleSceneIntro::GenerateSmallBarriers(float x, float z, bool xRoad)
