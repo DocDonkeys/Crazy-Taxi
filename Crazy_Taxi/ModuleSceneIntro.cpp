@@ -45,6 +45,7 @@ bool ModuleSceneIntro::Start()
 	float buildingDistance = buildData.baseSize + buildData.roadSize;
 	float roadStart = cityStart + buildingDistance / 2;
 	Cube* tmpCube;
+	TaxiStop* tmpStop;
 
 	//Building Generator
 	srand((uint)time(NULL));
@@ -56,12 +57,18 @@ bool ModuleSceneIntro::Start()
 		}
 	}
 
+	int rng;
 	//Crossings Generator
 	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
 		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
-			tmpCube = GenerateCrossing(currX, currZ);
-			//obstacles.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 0.0f);
+			rng = rand() % 2;
+
+			if (rng == 1) {
+				tmpStop = GenerateCrossing(currX, currZ);
+				goals.add(tmpStop);
+				App->physics->AddBody(*tmpStop->pole, 0.0f);
+				App->physics->AddBody(*tmpStop->sign, 0.0f);
+			}
 		}
 	}
 
@@ -109,6 +116,12 @@ bool ModuleSceneIntro::CleanUp()
 	}
 	obstacles.clear();
 
+	//Goals CleanUp
+	for (p2List_item<TaxiStop*>* item = goals.getFirst(); item != nullptr; item = item->next) {
+		delete item->data;
+	}
+	goals.clear();
+
 	return true;
 }
 
@@ -140,6 +153,12 @@ update_status ModuleSceneIntro::Update(float dt)
 	//Obstacle Rendering
 	for (p2List_item<Primitive*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
 		item->data->Render();
+	}
+
+	//Goals Rendering
+	for (p2List_item<TaxiStop*>* item = goals.getFirst(); item != nullptr; item = item->next) {
+		item->data->pole->Render();
+		item->data->sign->Render();
 	}
 
 	Cube c(2,1,2);
@@ -242,13 +261,14 @@ Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 	return tmpCube;
 }
 
-Cube* ModuleSceneIntro::GenerateCrossing(float x, float z)
+TaxiStop* ModuleSceneIntro::GenerateCrossing(float x, float z)
 {
-	Cube* tmpCube = new Cube(5.0f, 10.0f, 5.0f);
-	tmpCube->color.Set(1.0f, 1.0f, 1.0f);
-	tmpCube->SetPos(x, 10.0f / 2, z);
+	TaxiStop* stop = new TaxiStop(1.0f, 10.0f, 1.0f);
 
-	return tmpCube;
+	stop->pole->SetPos(x, 5.0f, z);
+	stop->sign->SetPos(x + 2.5f, 10.0f - 1.0f, z);
+
+	return stop;
 }
 
 RoadObstacle ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
