@@ -12,8 +12,9 @@ struct PhysMotor3D;
 
 enum class RoadObstacle	//Unmovable, avoid
 {
-	DYNAMIC_OBJECT,	//Create object if NONE
+	NONE,
 
+	//Unmovable
 	RAMP,
 	HOLE_RAMP,
 	WALL,
@@ -21,13 +22,8 @@ enum class RoadObstacle	//Unmovable, avoid
 	GROUND_BARRIERS,
 	LAMP_POSTS,
 
-	MAX_TYPES
-};
-
-enum class ObjectType	//Movable, collide
-{
-	NONE,	//Create nothing
-
+	//Movable
+	BENCHES,
 	PHONEBOX,
 	MAILBOX,
 	BOXES,
@@ -39,13 +35,22 @@ enum class ObjectType	//Movable, collide
 	MAX_TYPES
 };
 
-struct CityData {
+struct BuildingData 
+{
 	float baseSize = 50.0f;
 	float height;
 	float maxHeight = 150.0f;
 	float minHeight = 20.0f;
-	float roadSize = 30.0f;
 	int randHeight = (int)(maxHeight - minHeight) + 1;
+};
+
+struct CityData
+{
+	BuildingData building;
+	float cityStart = 300.0f;
+	float roadSize = 30.0f;
+	float buildingDistance = building.baseSize + roadSize;
+	float roadStart = cityStart + buildingDistance / 2;
 };
 
 struct TaxiStop {
@@ -78,9 +83,13 @@ public:
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 private:
+	int CreateCityBuildings();
+	int CreateCityGoals();
+	int CreateCityObstacles();
+
 	Cube* GenerateBuilding(float x, float z);
-	TaxiStop* GenerateCrossing(float x, float z);
-	RoadObstacle GenerateRoad(float x, float z, bool xRoad);
+	TaxiStop* GenerateGoal(float x, float z);
+	RoadObstacle GenerateObstacle(float x, float z, bool xRoad);
 
 	void GenerateRamp(float x, float z, bool xRoad);
 	void GenerateHoleRamp(float x, float z, bool xRoad);
@@ -89,7 +98,7 @@ private:
 	void GenerateGroundBarriers(float x, float z, bool xRoad);
 	void GenerateLampPosts(float x, float z, bool xRoad);
 
-	void GenerateObject(float x, float z, bool xRoad);
+	void GenerateBenches(float x, float z, bool xRoad);
 	void GenereateMailbox(float x, float z, bool xRoad);
 	void GenerateBoxes(float x, float z, bool xRoad);
 	void GenerateBarrier(float x, float z, bool xRoad);
@@ -132,16 +141,14 @@ public:
 	Cube* c1;
 
 	//Carles
-	CityData buildData;
+	CityData city;
 	p2List<Cube*> buildings;
 	p2List<Primitive*> obstacles;
 	p2List<Primitive*> objects;
 	p2List<TaxiStop*> goals;
+	int minGoals = 5;
 
 	Timer disco;	//BPM 140 (2.33333 BPS)
 	Uint32 discoDelay = 428;
 	float red, green, blue;
-
-private:
-	//Cube* GenerateBuilding();
 };

@@ -40,57 +40,25 @@ bool ModuleSceneIntro::Start()
 	test->SetAsSensor(true);
 	test->collision_listeners.add(this);
 	vec3 testPosition = test->GetPosition();
-	
-	//Test Carles
-	float cityStart = 300.0f;
-	float buildingDistance = buildData.baseSize + buildData.roadSize;
-	float roadStart = cityStart + buildingDistance / 2;
-	Cube* tmpCube;
-	TaxiStop* tmpStop;
 
-	//Building Generator
+	//Rand seed based on current time
 	srand((uint)time(NULL));
-	for (float currX = cityStart; currX > -cityStart; currX -= buildingDistance) {
-		for (float currZ = cityStart; currZ > -cityStart; currZ -= buildingDistance) {
-			tmpCube = GenerateBuilding(currX, currZ);
-			buildings.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 0.0f);
+
+	int counter;
+
+	//City generator
+	CreateCityBuildings();
+	CreateCityObstacles();
+	counter = CreateCityGoals();
+
+	// Reach minimum goals
+	while (counter < minGoals) {
+		for (p2List_item<TaxiStop*>* item = goals.getFirst(); item != nullptr; item = item->next) {
+			delete item->data;
 		}
+		goals.clear();
+		counter = CreateCityGoals();
 	}
-
-	int rng;
-	//Crossings Generator
-	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
-		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
-			rng = rand() % 2;
-
-			if (rng == 1) {
-				tmpStop = GenerateCrossing(currX, currZ);
-				goals.add(tmpStop);
-				App->physics->AddBody(*tmpStop->pole, 0.0f);
-				App->physics->AddBody(*tmpStop->sign, 0.0f);
-			}
-		}
-	}
-
-	//Street Generator
-	for (float currX = roadStart; currX > -roadStart; currX -= buildingDistance) {
-		for (float currZ = cityStart; currZ > -cityStart; currZ -= buildingDistance) {
-			GenerateRoad(currX, currZ, false);
-		}
-	}
-	for (float currX = cityStart; currX > -cityStart; currX -= buildingDistance) {
-		for (float currZ = roadStart; currZ > -roadStart; currZ -= buildingDistance) {
-			GenerateRoad(currX, currZ, true);
-		}
-	}
-
-	//Test carles 2
-	/*c2 = new Cube(2, 1, 2);
-	c2->SetPos(30.0f, 0.5f, 0);
-	c2->color.Set(0, 200, 100);
-
-	test = App->physics->AddBody(*c2, 1.0f);*/
 
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
@@ -247,22 +215,86 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	}
 }
 
+int ModuleSceneIntro::CreateCityBuildings()
+{
+	int counter = 0;
+
+	Cube* tmpCube;
+
+	for (float currX = city.cityStart; currX > -city.cityStart; currX -= city.buildingDistance) {
+		for (float currZ = city.cityStart; currZ > -city.cityStart; currZ -= city.buildingDistance) {
+			tmpCube = GenerateBuilding(currX, currZ);
+			buildings.add(tmpCube);
+			App->physics->AddBody(*tmpCube, 0.0f);
+			counter++;
+		}
+	}
+
+	return counter;
+}
+
+int ModuleSceneIntro::CreateCityGoals()
+{
+	int counter = 0;
+	TaxiStop* tmpStop;
+	int rng;
+
+	for (float currX = city.roadStart; currX > -city.roadStart; currX -= city.buildingDistance) {
+		for (float currZ = city.roadStart; currZ > -city.roadStart; currZ -= city.buildingDistance) {
+			rng = rand() % 2;
+
+			if (rng == 1) {
+				tmpStop = GenerateGoal(currX, currZ);
+				goals.add(tmpStop);
+				App->physics->AddBody(*tmpStop->pole, 0.0f);
+				App->physics->AddBody(*tmpStop->sign, 0.0f);
+				counter++;
+			}
+		}
+	}
+
+	return counter;
+}
+
+int ModuleSceneIntro::CreateCityObstacles()
+{
+	int counter = 0;
+	RoadObstacle ret;
+
+	for (float currX = city.roadStart; currX > -city.roadStart; currX -= city.buildingDistance) {
+		for (float currZ = city.cityStart; currZ > -city.cityStart; currZ -= city.buildingDistance) {
+			ret = GenerateObstacle(currX, currZ, false);
+			if (ret != RoadObstacle::NONE)
+				counter++;
+		}
+	}
+	for (float currX = city.cityStart; currX > -city.cityStart; currX -= city.buildingDistance) {
+		for (float currZ = city.roadStart; currZ > -city.roadStart; currZ -= city.buildingDistance) {
+			GenerateObstacle(currX, currZ, true);
+			if (ret != RoadObstacle::NONE)
+				counter++;
+		}
+	}
+
+	return counter;
+}
+
 Cube* ModuleSceneIntro::GenerateBuilding(float x, float z)
 {
-	buildData.height = (float)(rand() % buildData.randHeight) + buildData.minHeight;
+	city.building.height = (float)(rand() % city.building.randHeight) + city.building.minHeight;
 
 	red = (float)(rand() % 101) / 100.0f;
 	green = (float)(rand() % 101) / 100.0f;
 	blue = (float)(rand() % 101) / 100.0f;
 
-	Cube* tmpCube = new Cube(buildData.baseSize, buildData.height, buildData.baseSize);
+	Cube* tmpCube = new Cube(city.building.baseSize, city.building.height, city.building.baseSize);
 	tmpCube->color.Set(red, green, blue);
-	tmpCube->SetPos(x, buildData.height/2, z);
+	tmpCube->SetPos(x, city.building.height/2, z);
 
 	return tmpCube;
 }
 
-TaxiStop* ModuleSceneIntro::GenerateCrossing(float x, float z)
+TaxiStop* ModuleSceneIntro::GenerateGoal(float x, float z)
 {
 	TaxiStop* stop = new TaxiStop(1.0f, 10.0f, 1.0f);
 
@@ -272,11 +304,15 @@ TaxiStop* ModuleSceneIntro::GenerateCrossing(float x, float z)
 	return stop;
 }
 
-RoadObstacle ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
+RoadObstacle ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 {
 	RoadObstacle obstacle = (RoadObstacle)(rand() % (int)RoadObstacle::MAX_TYPES);
 
-	switch (obstacle) {
+	switch (obstacle)
+	{
+	//Unmovable
+	case RoadObstacle::NONE:
+		break;
 	case RoadObstacle::RAMP:
 		GenerateRamp(x, z, xRoad);
 		break;
@@ -295,8 +331,28 @@ RoadObstacle ModuleSceneIntro::GenerateRoad(float x, float z, bool xRoad)
 	case RoadObstacle::LAMP_POSTS:
 		GenerateLampPosts(x, z, xRoad);
 		break;
-	case RoadObstacle::DYNAMIC_OBJECT:
-		GenerateObject(x, z, xRoad);
+	case RoadObstacle::BARRIER:
+		GenerateBarrier(x, z, xRoad);
+		break;
+	
+	//Movable
+	case RoadObstacle::BENCHES:
+		GenerateBenches(x, z, xRoad);
+		break;
+	case RoadObstacle::MAILBOX:
+		GenereateMailbox(x, z, xRoad);
+		break;
+	case RoadObstacle::BOXES:
+		GenerateBoxes(x, z, xRoad);
+		break;
+	case RoadObstacle::SMALL_BARRIERS:
+		GenerateSmallBarriers(x, z, xRoad);
+		break;
+	case RoadObstacle::CONES:
+		GenerateCones(x, z, xRoad);
+		break;
+	case RoadObstacle::SIGN:
+		GenerateSign(x, z, xRoad);
 		break;
 	}
 
@@ -485,44 +541,22 @@ void ModuleSceneIntro::GenerateLampPosts(float x, float z, bool xRoad)
 	tmpCube->SetPos(x, 10.0f / 2, z);
 }
 
-void ModuleSceneIntro::GenerateObject(float x, float z, bool xRoad)
+void ModuleSceneIntro::GenerateBarrier(float x, float z, bool xRoad)
 {
-	ObjectType object = (ObjectType)(rand() % (int)ObjectType::MAX_TYPES);
-	switch (object) {
-	case ObjectType::MAILBOX:
-		GenereateMailbox(x, z, xRoad);
-		break;
-	case ObjectType::BOXES:
-		GenerateBoxes(x, z, xRoad);
-		break;
-	case ObjectType::BARRIER:
-		GenerateBarrier(x, z, xRoad);
-		break;
-	case ObjectType::SMALL_BARRIERS:
-		GenerateSmallBarriers(x, z, xRoad);
-		break;
-	case ObjectType::CONES:
-		GenerateCones(x, z, xRoad);
-		break;
-	case ObjectType::SIGN:
-		GenerateSign(x, z, xRoad);
-		break;
-	case ObjectType::NONE:
-		break;
-	}
+
 }
 
+void ModuleSceneIntro::GenerateBenches(float x, float z, bool xRoad)
+{
+
+
+}
 void ModuleSceneIntro::GenereateMailbox(float x, float z, bool xRoad)
 {
 
 }
 
 void ModuleSceneIntro::GenerateBoxes(float x, float z, bool xRoad)
-{
-
-}
-
-void ModuleSceneIntro::GenerateBarrier(float x, float z, bool xRoad)
 {
 
 }
