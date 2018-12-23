@@ -605,4 +605,9 @@ void ModuleSceneIntro::ChooseGameplayGoals()
 		}
 	}
 
+	for (int i = 0; i < 5; ++i)
+	{
+		goals.at(indexes[i], game_destinations[i]);
+	}
+
 }
