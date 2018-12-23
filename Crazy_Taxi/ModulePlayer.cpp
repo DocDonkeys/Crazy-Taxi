@@ -92,8 +92,8 @@ update_status ModulePlayer::Update(float dt)
 		car_fliper->SetPos(pos.x, pos.y - 10, pos.z + 1);
 		car_fliper->Push(0,5000.0f,0);*/
 
-		vehicle->Push(0, 5000.0f, 0);
-		App->physics->SetVehicleRotation(vehicle, 180);
+		vehicle->SetPos(vehicle->GetPosition().x, vehicle->GetPosition().y + 4, vehicle->GetPosition().z);
+		App->physics->SetVehicleRotation(vehicle, -180);
 	}
 
 	if (vehicle->GetKmh() < 0.2 && vehicle->GetKmh() > -0.2f) {
@@ -118,6 +118,10 @@ update_status ModulePlayer::Update(float dt)
 	
 	App->camera->Position = (vehicle->GetPosition() - vehicle->GetForwardVec() * 20 )+ vec3(0,6,0);
 
+	if (App->camera->Position.y < 0.5f)
+		App->camera->Position.y = 0.5f;
+	
+	
 	return UPDATE_CONTINUE;
 }
 
