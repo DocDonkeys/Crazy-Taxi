@@ -66,6 +66,8 @@ bool ModuleSceneIntro::Start()
 		App->physics->AddBody(*item->data->sign, 0.0f);
 	}
 
+	//Choose the TaxiStops that will be used in the game
+	ChooseGameplayGoals();
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
 	App->audio->SetMusicVolume(30);
