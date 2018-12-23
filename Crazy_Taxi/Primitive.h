@@ -26,6 +26,8 @@ public:
 	void			Scale(float x, float y, float z);
 	PrimitiveTypes	GetType() const;
 
+	vec3 GetPosition();
+
 	//Trying to do the Arrow CHANGE/FIX: Didac
 	// -----------------------------------------------------------------
 	void LookAt(const vec3 & Pos, const vec3 &Spot);
