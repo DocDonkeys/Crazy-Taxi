@@ -23,14 +23,13 @@ enum class ObstacleType	//Unmovable, avoid
 	LAMP_POSTS,
 
 	//Movable
-	BENCHES,
-	PHONEBOX,
+	BREAKABLE_WALL,
 	MAILBOX,
 	BOXES,
 	BARRIER,
 	SMALL_BARRIERS,
-	CONES,
 	SIGN,
+	WRECKING_BALL,
 
 	MAX_TYPES
 };
@@ -41,7 +40,7 @@ struct Obstacle
 	Primitive* shape;
 	bool dynamic = false;
 
-	~Obstacle() {
+	~Obstacle() {	//Bodies are deleted on the full body list
 		delete shape;
 	}
 };
@@ -109,13 +108,13 @@ private:
 	void GenerateGroundBarriers(float x, float z, bool xRoad);
 	void GenerateLampPosts(float x, float z, bool xRoad);
 
-	void GenerateBenches(float x, float z, bool xRoad);
+	void GenerateBreakableWall(float x, float z, bool xRoad);
 	void GenereateMailbox(float x, float z, bool xRoad);
 	void GenerateBoxes(float x, float z, bool xRoad);
-	void GenerateBarrier(float x, float z, bool xRoad);
+	void GenerateBarriers(float x, float z, bool xRoad);
 	void GenerateSmallBarriers(float x, float z, bool xRoad);
-	void GenerateCones(float x, float z, bool xRoad);
 	void GenerateSign(float x, float z, bool xRoad);
+	void GenerateWreckingBall(float x, float z, bool xRoad);
 
 	void ChooseGameplayGoals();
 
