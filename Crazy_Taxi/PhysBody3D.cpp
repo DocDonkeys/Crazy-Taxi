@@ -78,3 +78,15 @@ vec3 PhysBody3D::GetPosition()
 
 	return pos;
 }
+
+void PhysBody3D::SetRotation(vec3 axis, float angle)
+{
+	/*btQuaternion q;
+	q.setRotation(axis, angle);
+	float matrix;
+	GetTransform(&matrix);
+	btTransform t = matrix;
+	t.setRotation(q);*/
+
+	//body->setWorldTransform(t);
+}

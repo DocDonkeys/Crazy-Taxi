@@ -164,6 +164,12 @@ public:
 	Uint32 discoDelay = 428;
 	float red, green, blue;
 
+	//Arrow
+	Cylinder arrowtest;
+	PhysBody3D* arrow_cylinder;
+
+	Cube arrow_cube;
+	PhysBody3D* arrow_end;
 
 
 	TaxiStop* game_destinations[5];
@@ -172,7 +178,7 @@ public:
 	uint nextStop = 0;
 
 
-	float time_left;
+	int time_left;
 	int max_time = 120;
 	Timer time_passed;
 };

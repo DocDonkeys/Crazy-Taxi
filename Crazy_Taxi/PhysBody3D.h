@@ -24,6 +24,8 @@ public:
 	void SetAsSensor(bool is_sensor);
 	vec3 GetPosition();
 
+	void SetRotation(vec3 axis, float angle);
+
 private:
 	btRigidBody* body = nullptr;
 

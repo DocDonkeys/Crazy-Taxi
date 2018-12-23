@@ -87,6 +87,24 @@ bool ModuleSceneIntro::Start()
 	taxiStop_sensor->SetAsSensor(true);
 	taxiStop_sensor->collision_listeners.add(App->scene_intro);
 
+
+	//ARROW
+	arrowtest.radius = 0.5;
+	arrowtest.height = 3;
+
+	arrow_cylinder = App->physics->AddBody(arrowtest,0.0f);
+
+	arrow_cube.Scale(0.5f,0.5f,0.5f);
+	arrow_cube.color.Set(0, 1.0f, 0);
+
+	arrow_end = App->physics->AddBody(arrow_cube, 0.0f);
+
+	arrow_cylinder->SetPos(0,0,0);
+	arrow_end->SetPos(1.5f,0,0);
+
+	App->physics->AddConstraintP2P(*arrow_cylinder, *arrow_end,vec3(-1.5f,0,0),vec3(0,0,0));
+	
+
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
 	App->audio->SetMusicVolume(30);
@@ -173,7 +191,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	c.Render();
 
 	//CHANGE/FIX Dídac: Testing some kind of arrow pointing to the destination
-	Cylinder arrowtest(0.5,3);
 	arrowtest.color.Set(128, 128, 0, 200.0f);
 	
 	vec3 arrowpos = App->player->vehicle->GetPosition() + App->player->vehicle->GetForwardVec() + vec3(0,5,0);
@@ -211,6 +228,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	
 
 	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
+	arrow_cylinder->SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 	//arrowtest.SetRotation(angle,vec3(x,y,z));
 	//arrowtest.transform.M[4] = angle;
 
@@ -235,6 +253,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	
 	arrowtest.SetRotation(angle,vec3(0,1,0));
+	
 	
 	//arrowtest.transform.M[6] = angle;
 	arrowtest.Render();
