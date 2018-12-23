@@ -350,7 +350,7 @@ TaxiStop* ModuleSceneIntro::GenerateGoal(float x, float z)
 
 ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 {
-	ObstacleType obstacle = (ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
+	ObstacleType obstacle = ObstacleType::WRECKING_BALL;//(ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
 
 	switch (obstacle)
 	{
@@ -376,12 +376,12 @@ ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 		GenerateLampPosts(x, z, xRoad);
 		break;
 	case ObstacleType::BARRIER:
-		GenerateBarrier(x, z, xRoad);
+		GenerateBarriers(x, z, xRoad);
 		break;
 	
 	//Movable
-	case ObstacleType::BENCHES:
-		GenerateBenches(x, z, xRoad);
+	case ObstacleType::BREAKABLE_WALL:
+		GenerateBreakableWall(x, z, xRoad);
 		break;
 	case ObstacleType::MAILBOX:
 		GenereateMailbox(x, z, xRoad);
@@ -392,11 +392,11 @@ ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 	case ObstacleType::SMALL_BARRIERS:
 		GenerateSmallBarriers(x, z, xRoad);
 		break;
-	case ObstacleType::CONES:
-		GenerateCones(x, z, xRoad);
-		break;
 	case ObstacleType::SIGN:
 		GenerateSign(x, z, xRoad);
+		break;
+	case ObstacleType::WRECKING_BALL:
+		GenerateWreckingBall(x, z, xRoad);
 		break;
 	}
 
@@ -599,47 +599,161 @@ void ModuleSceneIntro::GenerateLampPosts(float x, float z, bool xRoad)
 	}
 }
 
-void ModuleSceneIntro::GenerateBarrier(float x, float z, bool xRoad)
+void ModuleSceneIntro::GenerateBarriers(float x, float z, bool xRoad)
 {
+	vec3 poleAnchor(0.0f, 1.0f, 0.0f);
 
+	if (xRoad == true) {
+		for (int j = -1; j < 2; j += 2) {
+			for (int i = -1; i < 2; i += 2) {
+				vec3 barrierAnchor(0.0f, -0.5f, i * 6.0f);
+				Obstacle* pole = new Obstacle;
+				pole->shape = new Cube(1.0f, 1.0f, 1.0f);
+				pole->shape->SetPos(x + (j * 12.0f), 0.5f, z + (i * 14.0f));
+				pole->shape->color.Set(1.0f, 0.0f, 0.0f);
+				pole->body = App->physics->AddBody(*(Cube*)pole->shape, 0.0f);
+				obstacles.add(pole);
+
+				Obstacle* barrier = new Obstacle;
+				barrier->shape = new Cube(1.0f, 2.0f, 14.0f);
+				barrier->shape->SetPos(x + (j * 12.0f), 1.0f + 1.0f, z - (i * 6.0f) + (i * 14.0f));
+				barrier->shape->color.Set(0.0f, 0.7f, 0.0f);
+				barrier->dynamic = true;
+				barrier->body = App->physics->AddBody(*(Cube*)barrier->shape, 50.0f);
+				obstacles.add(barrier);
+
+				App->physics->AddConstraintHinge(*pole->body, *barrier->body, poleAnchor, barrierAnchor, vec3(0.0f, 1.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+			}
+		}
+	}
+	else {
+		for (int j = -1; j < 2; j += 2) {
+			for (int i = -1; i < 2; i += 2) {
+				vec3 barrierAnchor(i * 6.0f, -0.5f, 0.0f);
+				Obstacle* pole = new Obstacle;
+				pole->shape = new Cube(1.0f, 1.0f, 1.0f);
+				pole->shape->SetPos(x + (i * 14.0f), 0.5f, z + (j * 12.0f));
+				pole->shape->color.Set(1.0f, 0.0f, 0.0f);
+				pole->body = App->physics->AddBody(*(Cube*)pole->shape, 0.0f);
+				obstacles.add(pole);
+
+				Obstacle* barrier = new Obstacle;
+				barrier->shape = new Cube(14.0f, 2.0f, 1.0f);
+				barrier->shape->SetPos(x - (i * 6.0f) + (i * 14.0f), 1.0f + 1.0f, z + (j * 12.0f));
+				barrier->shape->color.Set(0.0f, 0.7f, 0.0f);
+				barrier->dynamic = true;
+				barrier->body = App->physics->AddBody(*(Cube*)barrier->shape, 50.0f);
+				obstacles.add(barrier);
+
+				App->physics->AddConstraintHinge(*pole->body, *barrier->body, poleAnchor, barrierAnchor, vec3(0.0f, 1.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+			}
+		}
+	}
 }
 
-void ModuleSceneIntro::GenerateBenches(float x, float z, bool xRoad)
+void ModuleSceneIntro::GenerateBreakableWall(float x, float z, bool xRoad)
 {
-
-
+	if (xRoad == true) {
+		for (int j = 2.0f; j < 11.0f; j += 4.0f) {
+			for (int i = -2; i < 3; i++) {
+				Obstacle* box = new Obstacle;
+				box->shape = new Cube(1.0f, 4.0f, 5.5f);
+				box->shape->SetPos(x, j, z + (5.5f * i));
+				box->shape->color.Set(0.0f, 1.0f, 0.0f);
+				box->dynamic = true;
+				box->body = App->physics->AddBody(*(Cube*)box->shape, 50.0f);
+				obstacles.add(box);
+			}
+		}
+	}
+	else {
+		for (int j = 2.0f; j < 11.0f; j += 4.0f) {
+			for (int i = -2; i < 3; i++) {
+				Obstacle* box = new Obstacle;
+				box->shape = new Cube(5.5f, 4.0f, 1.0f);
+				box->shape->SetPos(x + (5.5f * i), j, z);
+				box->shape->color.Set(0.0f, 1.0f, 0.0f);
+				box->dynamic = true;
+				box->body = App->physics->AddBody(*(Cube*)box->shape, 50.0f);
+				obstacles.add(box);
+			}
+		}
+	}
 }
+
 void ModuleSceneIntro::GenereateMailbox(float x, float z, bool xRoad)
 {
-
+	if (xRoad == true) {
+		for (int i = -1; i < 2; i += 2) {
+			for (int j = -1; j < 2; j += 2) {
+				Obstacle* mailBox = new Obstacle;
+				mailBox->shape = new Cube(3.0f, 3.0f, 2.0f);
+				mailBox->shape->color.Set(0.0f, 0.7f, 0.0f);
+				mailBox->shape->SetPos(x + (8.0f * i), 1.5f, z + (6.0f * j));
+				mailBox->dynamic = true;
+				mailBox->body = App->physics->AddBody(*(Cube*)mailBox->shape, 50.0f);
+				obstacles.add(mailBox);
+			}
+		}
+	}
+	else {
+		for (int i = -1; i < 2; i += 2) {
+			for (int j = -1; j < 2; j += 2) {
+				Obstacle* mailBox = new Obstacle;
+				mailBox->shape = new Cube(2.0f, 3.0f, 3.0f);
+				mailBox->shape->color.Set(0.0f, 0.7f, 0.0f);
+				mailBox->shape->SetPos(x + (6.0f * j), 1.5f, z + (8.0f * i));
+				mailBox->dynamic = true;
+				mailBox->body = App->physics->AddBody(*(Cube*)mailBox->shape, 50.0f);
+				obstacles.add(mailBox);
+			}
+		}
+	}
 }
 
 void ModuleSceneIntro::GenerateBoxes(float x, float z, bool xRoad)
 {
-	Obstacle* box = new Obstacle;
-
 	if (xRoad == true) {
-		box->shape = new Cube(5.0f, 5.0f, 5.0f);
-		box->shape->SetPos(x, 2.5f, z);
+		for (int i = -1; i < 2; i += 2) {
+			Obstacle* box = new Obstacle;
+			box->shape = new Cube(3.0f, 3.0f, 3.0f);
+			box->shape->SetPos(x, 1.5f, z + (2.0f * i));
+			box->shape->color.Set(0.0f, 0.5f, 0.0f);
+			box->dynamic = true;
+			box->body = App->physics->AddBody(*(Cube*)box->shape, 200.0f);
+			obstacles.add(box);
+		}
+
+		Obstacle* box = new Obstacle;
+		box->shape = new Cube(3.0f, 3.0f, 3.0f);
+		box->shape->SetPos(x, 1.5f + 3.0f, z);
+		box->shape->color.Set(0.0f, 0.5f, 0.0f);
+		box->dynamic = true;
+		box->body = App->physics->AddBody(*(Cube*)box->shape, 200.0f);
+		obstacles.add(box);
 	}
 	else {
-		box->shape = new Cube(5.0f, 5.0f, 5.0f);
-		box->shape->SetPos(x, 2.5f, z);
+		for (int i = -1; i < 2; i += 2) {
+			Obstacle* box = new Obstacle;
+			box->shape = new Cube(3.0f, 3.0f, 3.0f);
+			box->shape->SetPos(x + (2.0f * i), 1.5f, z);
+			box->shape->color.Set(0.0f, 0.5f, 0.0f);
+			box->dynamic = true;
+			box->body = App->physics->AddBody(*(Cube*)box->shape, 200.0f);
+			obstacles.add(box);
+		}
+
+		Obstacle* box = new Obstacle;
+		box->shape = new Cube(3.0f, 3.0f, 3.0f);
+		box->shape->SetPos(x, 1.5f + 3.0f, z);
+		box->shape->color.Set(0.0f, 0.5f, 0.0f);
+		box->dynamic = true;
+		box->body = App->physics->AddBody(*(Cube*)box->shape, 200.0f);
+		obstacles.add(box);
 	}
-
-	box->shape->color.Set(0.0f, 1.0f, 0.0f);
-	box->dynamic = true;
-
-	box->body = App->physics->AddBody(*(Cube*)box->shape, 10.0f);
-	obstacles.add(box);
 }
 
 void ModuleSceneIntro::GenerateSmallBarriers(float x, float z, bool xRoad)
-{
-
-}
-
-void ModuleSceneIntro::GenerateCones(float x, float z, bool xRoad)
 {
 
 }
@@ -649,6 +763,10 @@ void ModuleSceneIntro::GenerateSign(float x, float z, bool xRoad)
 
 }
 
+void ModuleSceneIntro::GenerateWreckingBall(float x, float z, bool xRoad)
+{
+
+}
 
 void ModuleSceneIntro::ChooseGameplayGoals()
 {
