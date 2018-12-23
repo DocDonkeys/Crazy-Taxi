@@ -107,7 +107,7 @@ bool ModuleSceneIntro::CleanUp()
 	buildings.clear();
 
 	//Obstacle CleanUp
-	for (p2List_item<Primitive*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
+	for (p2List_item<Obstacle*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
 		delete item->data;
 	}
 	obstacles.clear();
@@ -152,8 +152,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 
 	//Obstacle Rendering
-	for (p2List_item<Primitive*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
-		item->data->Render();
+	for (p2List_item<Obstacle*>* item = obstacles.getFirst(); item != nullptr; item = item->next) {
+		item->data->shape->Render();
 	}
 
 	//Goals Rendering
@@ -402,94 +402,104 @@ ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateHoleRamp(float x, float z, bool xRoad)
 {
-	Cube* ramp;
-	Cube* wall;
+	Obstacle* ramp;
+	Obstacle* wall;
+
 	vec3 rampVector;
 
 	if (xRoad == true) {
 		rampVector.Set(0.0f, 0.0f, 1.0f);
 		for (int i = -1; i < 2; i += 2) {
-			ramp = new Cube(30.0f, 3.0f, 10.0f);
-			ramp->SetPos(x, 2.0f, z + (i * 10.0f));
-			ramp->SetRotation(15.0f, rampVector);
-			ramp->color.Set(1.0f, 0.0f, 0.0f);
-			obstacles.add(ramp);
-			App->physics->AddBody(*ramp, 0.0f);
+			ramp = new Obstacle;
+			ramp->shape = new Cube(30.0f, 3.0f, 10.0f);
+			ramp->shape->SetPos(x, 2.0f, z + (i * 10.0f));
+			ramp->shape->SetRotation(15.0f, rampVector);
+			ramp->shape->color.Set(1.0f, 0.0f, 0.0f);
 
-			wall = new Cube(1.0f, 2.0f, 10.0f);
-			wall->SetPos(x + 8.0f, 1.0f, z + (i * 10.0f));
-			wall->color.Set(1.0f, 0.0f, 0.0f);
+			ramp->body = App->physics->AddBody(*(Cube*)(ramp->shape), 0.0f);
+			obstacles.add(ramp);
+
+			wall = new Obstacle;
+			wall->shape = new Cube(1.0f, 2.0f, 10.0f);
+			wall->shape->SetPos(x + 8.0f, 1.0f, z + (i * 10.0f));
+			wall->shape->color.Set(1.0f, 0.0f, 0.0f);
+
+			wall->body = App->physics->AddBody(*(Cube*)(wall->shape), 0.0f);
 			obstacles.add(wall);
-			App->physics->AddBody(*wall, 0.0f);
 		}
 	}
 	else {
 		rampVector.Set(1.0f, 0.0f, 0.0f);
 		for (int i = -1; i < 2; i += 2) {
-			ramp = new Cube(10.0f, 3.0f, 30.0f);
-			ramp->SetPos(x + (i * 10.0f), 2.0f, z);
-			ramp->SetRotation(15.0f, rampVector);
-			ramp->color.Set(1.0f, 0.0f, 0.0f);
-			obstacles.add(ramp);
-			App->physics->AddBody(*ramp, 0.0f);
+			ramp = new Obstacle;
+			ramp->shape = new Cube(10.0f, 3.0f, 30.0f);
+			ramp->shape->SetPos(x + (i * 10.0f), 2.0f, z);
+			ramp->shape->SetRotation(15.0f, rampVector);
+			ramp->shape->color.Set(1.0f, 0.0f, 0.0f);
 
-			wall = new Cube(10.0f, 2.0f, 1.0f);
-			wall->SetPos(x + (i * 10.0f), 1.0f, z - 8.0f);
-			wall->color.Set(1.0f, 0.0f, 0.0f);
+			ramp->body = App->physics->AddBody(*(Cube*)(ramp->shape), 0.0f);
+			obstacles.add(ramp);
+
+			wall = new Obstacle;
+			wall->shape = new Cube(10.0f, 2.0f, 1.0f);
+			wall->shape->SetPos(x + (i * 10.0f), 1.0f, z - 8.0f);
+			wall->shape->color.Set(1.0f, 0.0f, 0.0f);
+
+			wall->body = App->physics->AddBody(*(Cube*)(wall->shape), 0.0f);
 			obstacles.add(wall);
-			App->physics->AddBody(*wall, 0.0f);
 		}
 	}
 }
 
 void ModuleSceneIntro::GenerateRamp(float x, float z, bool xRoad)
 {
-	Cube* ramp1 = new Cube(20.0f, 3.0f, 20.0f);
-	Cube* ramp2 = new Cube(20.0f, 3.0f, 20.0f);
 	vec3 vector;
+	Obstacle* ramp1 = new Obstacle;
+	Obstacle* ramp2 = new Obstacle;
+
+	ramp1->shape = new Cube(20.0f, 3.0f, 20.0f);
+	ramp2->shape = new Cube(20.0f, 3.0f, 20.0f);
 
 	if (xRoad == true) {
 		vector.Set(0.0f, 0.0f, 1.0f);
-		ramp1->SetPos(x + 10.0f, 0.0f, z);
-		ramp2->SetPos(x - 10.0f, 0.0f, z);
+		ramp1->shape->SetPos(x + 10.0f, 0.0f, z);
+		ramp2->shape->SetPos(x - 10.0f, 0.0f, z);
 	}
 	else {
 		vector.Set(1.0f, 0.0f, 0.0f);
-		ramp1->SetPos(x, 0.0f, z - 10.0f);
-		ramp2->SetPos(x, 0.0f, z + 10.0f);
+		ramp1->shape->SetPos(x, 0.0f, z - 10.0f);
+		ramp2->shape->SetPos(x, 0.0f, z + 10.0f);
 	}
-	ramp1->color.Set(1.0f, 0.0f, 0.0f);
-	ramp2->color.Set(1.0f, 0.0f, 0.0f);
+	ramp1->shape->color.Set(1.0f, 0.0f, 0.0f);
+	ramp2->shape->color.Set(1.0f, 0.0f, 0.0f);
 
-	ramp1->SetRotation(350.0f, vector);
-	ramp2->SetRotation(10.0f, vector);
+	ramp1->shape->SetRotation(350.0f, vector);
+	ramp2->shape->SetRotation(10.0f, vector);
+
+	ramp1->body = App->physics->AddBody(*(Cube*)(ramp1->shape), 0.0f);
+	ramp2->body = App->physics->AddBody(*(Cube*)(ramp2->shape), 0.0f);
 
 	obstacles.add(ramp1);
-	App->physics->AddBody(*ramp1, 0.0f);
 	obstacles.add(ramp2);
-	App->physics->AddBody(*ramp2, 0.0f);
 }
 
 void ModuleSceneIntro::GenerateWall(float x, float z, bool xRoad)
 {
-	Cube* tmpCube = new Cube;
-	vec3 vector;
+	Obstacle* wall = new Obstacle;
 
 	if (xRoad == true) {
-		vector.Set(1.0f, 10.0f, 25.0f);
-		tmpCube->size = vector;
-		tmpCube->SetPos(x + 24.5f, 5.0f, z - 2.5f);
+		wall->shape = new Cube(1.0f, 10.0f, 25.0f);
+		wall->shape->SetPos(x + 24.5f, 5.0f, z - 2.5f);
 	}
 	else {
-		vector.Set(25.0f, 10.0f, 1.0f);
-		tmpCube->size = vector;
-		tmpCube->SetPos(x - 2.5f, 5.0f, z + 24.5f);
+		wall->shape = new Cube(25.0f, 10.0f, 1.0f);
+		wall->shape->SetPos(x - 2.5f, 5.0f, z + 24.5f);
 	}
 
-	tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+	wall->shape->color.Set(1.0f, 0.0f, 0.0f);
 
-	obstacles.add(tmpCube);
-	App->physics->AddBody(*tmpCube, 0.0f);
+	wall->body = App->physics->AddBody(*(Cube*)wall->shape, 0.0f);
+	obstacles.add(wall);
 }
 
 void ModuleSceneIntro::GenerateGroundBumps(float x, float z, bool xRoad)
@@ -497,21 +507,23 @@ void ModuleSceneIntro::GenerateGroundBumps(float x, float z, bool xRoad)
 	if (xRoad == true) {
 		vec3 vector(0.0f, 1.0f, 0.0f);
 		for (int i = -1; i < 2; i++) {
-			Cylinder* tmpCylinder = new Cylinder(2.0f, 23.0f);
-			tmpCylinder->color.Set(1.0f, 0.0f, 0.0f);
-			tmpCylinder->SetPos(x + (15.0f * i), -0.9f, z);
-			tmpCylinder->transform.rotate(90.0, vector);
-			obstacles.add(tmpCylinder);
-			App->physics->AddBody(*tmpCylinder, 0.0f);
+			Obstacle* bump = new Obstacle;
+			bump->shape = new Cylinder(2.0f, 23.0f);
+			bump->shape->color.Set(1.0f, 0.0f, 0.0f);
+			bump->shape->SetPos(x + (15.0f * i), -0.9f, z);
+			bump->shape->transform.rotate(90.0, vector);
+			bump->body = App->physics->AddBody(*(Cylinder*)bump->shape, 0.0f);
+			obstacles.add(bump);
 		}
 	}
 	else {
 		for (int i = -1; i < 2; i++) {
-			Cylinder* tmpCylinder = new Cylinder(2.0f, 23.0f);
-			tmpCylinder->color.Set(1.0f, 0.0f, 0.0f);
-			tmpCylinder->SetPos(x, -0.9f, z + (15.0f * i));
-			obstacles.add(tmpCylinder);
-			App->physics->AddBody(*tmpCylinder, 0.0f);
+			Obstacle* bump = new Obstacle;
+			bump->shape = new Cylinder(2.0f, 23.0f);
+			bump->shape->color.Set(1.0f, 0.0f, 0.0f);
+			bump->shape->SetPos(x, -0.9f, z + (15.0f * i));
+			bump->body = App->physics->AddBody(*(Cylinder*)bump->shape, 0.0f);
+			obstacles.add(bump);
 		}
 	};
 }
@@ -520,20 +532,22 @@ void ModuleSceneIntro::GenerateGroundBarriers(float x, float z, bool xRoad)
 {
 	if (xRoad == true) {
 		for (int i = -1; i < 2; i += 2) {
-			Cube* tmpCube = new Cube(2.0f, 3.0f, 14.0f);
-			tmpCube->color.Set(1.0f, 0.0f, 0.0f);
-			tmpCube->SetPos(x + (10.0f * i), 1.5f, z + (8.0f * i));
-			obstacles.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 0.0f);
+			Obstacle* barrier = new Obstacle;
+			barrier->shape = new Cube(2.0f, 3.0f, 14.0f);
+			barrier->shape->color.Set(1.0f, 0.0f, 0.0f);
+			barrier->shape->SetPos(x + (10.0f * i), 1.5f, z + (8.0f * i));
+			barrier->body = App->physics->AddBody(*(Cube*)barrier->shape, 0.0f);
+			obstacles.add(barrier);
 		}
 	}
 	else {
 		for (int i = -1; i < 2; i += 2) {
-			Cube* tmpCube = new Cube(14.0f, 3.0f, 2.0f);
-			tmpCube->color.Set(1.0f, 0.0f, 0.0f);
-			tmpCube->SetPos(x + (8.0f * i), 1.5f, z + (10.0f * i));
-			obstacles.add(tmpCube);
-			App->physics->AddBody(*tmpCube, 0.0f);
+			Obstacle* barrier = new Obstacle;
+			barrier->shape = new Cube(14.0f, 3.0f, 2.0f);
+			barrier->shape->color.Set(1.0f, 0.0f, 0.0f);
+			barrier->shape->SetPos(x + (10.0f * i), 1.5f, z + (8.0f * i));
+			barrier->body = App->physics->AddBody(*(Cube*)barrier->shape, 0.0f);
+			obstacles.add(barrier);
 		}
 	}
 }
@@ -545,41 +559,41 @@ void ModuleSceneIntro::GenerateLampPosts(float x, float z, bool xRoad)
 	if (xRoad == true) {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j += 2) {
-				Cube* tmpCube = new Cube(lampWidth, 14.0f, lampWidth);
-				tmpCube->color.Set(1.0f, 0.0f, 0.0f);
-				tmpCube->SetPos(x + (14.0f * i), 7.0f, z + (8.0f * j));
-				obstacles.add(tmpCube);
-				App->physics->AddBody(*tmpCube, 0.0f);
+				Obstacle* post = new Obstacle;
+				post->shape = new Cube(lampWidth, 14.0f, lampWidth);
+				post->shape->color.Set(1.0f, 0.0f, 0.0f);
+				post->shape->SetPos(x + (14.0f * i), 7.0f, z + (8.0f * j));
+				post->body = App->physics->AddBody(*(Cube*)post->shape, 0.0f);
+				obstacles.add(post);
 
-				Cube* lampTop = new Cube(2.5f, 1.0f, 4.0f);
-				lampTop->color.Set(1.0f, 0.0f, 0.0f);
-				lampTop->SetPos(x + (14.0f * i), 14.0f - 0.5f, z + (8.0f * j) - (j * 2.0f + j * lampWidth / 2));
-				obstacles.add(lampTop);
-				App->physics->AddBody(*lampTop, 0.0f);
+				Obstacle* top = new Obstacle;
+				top->shape = new Cube(2.5f, 1.0f, 4.0f);
+				top->shape->color.Set(1.0f, 0.0f, 0.0f);
+				top->shape->SetPos(x + (14.0f * i), 14.0f - 0.5f, z + (8.0f * j) - (j * 2.0f + j * lampWidth / 2));
+				top->body = App->physics->AddBody(*(Cube*)top->shape, 0.0f);
+				obstacles.add(top);
 			}
 		}
 	}
 	else {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j += 2) {
-				Cube* tmpCube = new Cube(lampWidth, 14.0f, lampWidth);
-				tmpCube->color.Set(1.0f, 0.0f, 0.0f);
-				tmpCube->SetPos(x + (8.0f * j), 7.0f, z + (14.0f * i));
-				obstacles.add(tmpCube);
-				App->physics->AddBody(*tmpCube, 0.0f);
+				Obstacle* post = new Obstacle;
+				post->shape = new Cube(lampWidth, 14.0f, lampWidth);
+				post->shape->color.Set(1.0f, 0.0f, 0.0f);
+				post->shape->SetPos(x + (8.0f * j), 7.0f, z + (14.0f * i));
+				post->body = App->physics->AddBody(*(Cube*)post->shape, 0.0f);
+				obstacles.add(post);
 
-				Cube* lampTop = new Cube(4.0f, 1.0f, 2.5f);
-				lampTop->color.Set(1.0f, 0.0f, 0.0f);
-				lampTop->SetPos(x + (8.0f * j) - (j * 2.0f + j * lampWidth / 2), 14.0f - 0.5f, z + (14.0f * i));
-				obstacles.add(lampTop);
-				App->physics->AddBody(*lampTop, 0.0f);
+				Obstacle* top = new Obstacle;
+				top->shape = new Cube(4.0f, 1.0f, 2.5f);
+				top->shape->color.Set(1.0f, 0.0f, 0.0f);
+				top->shape->SetPos(x + (8.0f * j) - (j * 2.0f + j * lampWidth / 2), 14.0f - 0.5f, z + (14.0f * i));
+				top->body = App->physics->AddBody(*(Cube*)top->shape, 0.0f);
+				obstacles.add(top);
 			}
 		}
 	}
-
-	Cube* tmpCube = new Cube(5.0f, 10.0f, 5.0f);
-	tmpCube->color.Set(1.0f, 1.0f, 1.0f);
-	tmpCube->SetPos(x, 10.0f / 2, z);
 }
 
 void ModuleSceneIntro::GenerateBarrier(float x, float z, bool xRoad)
