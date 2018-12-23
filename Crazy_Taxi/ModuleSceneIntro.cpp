@@ -51,13 +51,19 @@ bool ModuleSceneIntro::Start()
 	CreateCityObstacles();
 	counter = CreateCityGoals();
 
-	// Reach minimum goals
+	//Reach minimum goals
 	while (counter < minGoals) {
 		for (p2List_item<TaxiStop*>* item = goals.getFirst(); item != nullptr; item = item->next) {
 			delete item->data;
 		}
 		goals.clear();
 		counter = CreateCityGoals();
+	}
+
+	//Add Goal Bodies when minimal goals are reached
+	for (p2List_item<TaxiStop*>* item = goals.getFirst(); item != nullptr; item = item->next) {
+		App->physics->AddBody(*item->data->pole, 0.0f);
+		App->physics->AddBody(*item->data->sign, 0.0f);
 	}
 
 	//Music:
@@ -246,8 +252,6 @@ int ModuleSceneIntro::CreateCityGoals()
 			if (rng == 1) {
 				tmpStop = GenerateGoal(currX, currZ);
 				goals.add(tmpStop);
-				App->physics->AddBody(*tmpStop->pole, 0.0f);
-				App->physics->AddBody(*tmpStop->sign, 0.0f);
 				counter++;
 			}
 		}
@@ -368,7 +372,7 @@ void ModuleSceneIntro::GenerateHoleRamp(float x, float z, bool xRoad)
 	if (xRoad == true) {
 		rampVector.Set(0.0f, 0.0f, 1.0f);
 		for (int i = -1; i < 2; i += 2) {
-			ramp = new Cube(25.0f, 3.0f, 10.0f);
+			ramp = new Cube(30.0f, 3.0f, 10.0f);
 			ramp->SetPos(x, 2.0f, z + (i * 10.0f));
 			ramp->SetRotation(15.0f, rampVector);
 			ramp->color.Set(1.0f, 0.0f, 0.0f);
@@ -385,7 +389,7 @@ void ModuleSceneIntro::GenerateHoleRamp(float x, float z, bool xRoad)
 	else {
 		rampVector.Set(1.0f, 0.0f, 0.0f);
 		for (int i = -1; i < 2; i += 2) {
-			ramp = new Cube(10.0f, 3.0f, 25.0f);
+			ramp = new Cube(10.0f, 3.0f, 30.0f);
 			ramp->SetPos(x + (i * 10.0f), 2.0f, z);
 			ramp->SetRotation(15.0f, rampVector);
 			ramp->color.Set(1.0f, 0.0f, 0.0f);
