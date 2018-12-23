@@ -110,7 +110,7 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Render();
 
 	char title[80];
-	sprintf_s(title, "%.1f Km/h, Stopped = %d, angle = %f", vehicle->GetKmh(), (int)stopped, App->scene_intro->angle);
+	sprintf_s(title, "%.1f Km/h, Stopped = %d, angle = %f, Time left= %f", vehicle->GetKmh(), (int)stopped, App->scene_intro->angle,App->scene_intro->time_left);
 	App->window->SetTitle(title);
 
 	App->camera->LookAt(vehicle->GetPosition());
