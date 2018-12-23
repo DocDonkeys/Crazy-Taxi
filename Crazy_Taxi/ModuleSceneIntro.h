@@ -39,6 +39,10 @@ struct Obstacle
 {
 	PhysBody3D* body;
 	Primitive* shape;
+
+	~Obstacle() {
+		delete shape;
+	}
 };
 
 struct BuildingData 
@@ -151,8 +155,7 @@ public:
 	//Carles
 	CityData city;
 	p2List<Cube*> buildings;
-	p2List<Primitive*> obstacles;
-	p2List<Primitive*> objects;
+	p2List<Obstacle*> obstacles;
 	p2List<TaxiStop*> goals;
 	int minGoals = 5;
 
