@@ -118,6 +118,8 @@ bool ModuleSceneIntro::CleanUp()
 	}
 	goals.clear();
 
+	time_passed.Start();
+
 	return true;
 }
 
@@ -240,12 +242,15 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//CHANGE/FIX ARROWTEST ENDS HERE
 
+	time_left = int(max_time - time_passed.Read() / 1000.0f);
+
+
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if (body1 == taxiStop_sensor)
+	if (body1 == taxiStop_sensor && App->player->stopped == true)
 	{
 		nextStop++;
 		if (nextStop < 5)
@@ -256,6 +261,11 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y-2.5f, taxiStop_positions[nextStop].z);
 			game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
 			game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
+			max_time += 30;
+		}
+		else if (nextStop >= 5)
+		{
+			time_passed.Stop();
 		}
 	}
 	int workpls = 1;

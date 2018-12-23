@@ -169,4 +169,9 @@ public:
 	PhysBody3D* taxiStop_sensor;
 	vec3 taxiStop_positions[5];
 	uint nextStop = 0;
+
+
+	float time_left;
+	int max_time = 120;
+	Timer time_passed;
 };
