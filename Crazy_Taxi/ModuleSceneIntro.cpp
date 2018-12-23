@@ -325,22 +325,30 @@ void ModuleSceneIntro::GenerateHoleRamp(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateRamp(float x, float z, bool xRoad)
 {
-	Cube* tmpCube = new Cube(23.0f, 3.0f, 23.0f);
+	Cube* ramp1 = new Cube(20.0f, 3.0f, 20.0f);
+	Cube* ramp2 = new Cube(20.0f, 3.0f, 20.0f);
 	vec3 vector;
 
 	if (xRoad == true) {
 		vector.Set(0.0f, 0.0f, 1.0f);
+		ramp1->SetPos(x + 10.0f, 0.0f, z);
+		ramp2->SetPos(x - 10.0f, 0.0f, z);
 	}
 	else {
 		vector.Set(1.0f, 0.0f, 0.0f);
+		ramp1->SetPos(x, 0.0f, z - 10.0f);
+		ramp2->SetPos(x, 0.0f, z + 10.0f);
 	}
+	ramp1->color.Set(1.0f, 0.0f, 0.0f);
+	ramp2->color.Set(1.0f, 0.0f, 0.0f);
 
-	tmpCube->SetRotation(-10.0f, vector);
-	tmpCube->color.Set(1.0f, 0.0f, 0.0f);
-	tmpCube->SetPos(x, 0.0f, z);
+	ramp1->SetRotation(350.0f, vector);
+	ramp2->SetRotation(10.0f, vector);
 
-	obstacles.add(tmpCube);
-	App->physics->AddBody(*tmpCube, 0.0f);
+	obstacles.add(ramp1);
+	App->physics->AddBody(*ramp1, 0.0f);
+	obstacles.add(ramp2);
+	App->physics->AddBody(*ramp2, 0.0f);
 }
 
 void ModuleSceneIntro::GenerateWall(float x, float z, bool xRoad)
@@ -349,16 +357,17 @@ void ModuleSceneIntro::GenerateWall(float x, float z, bool xRoad)
 	vec3 vector;
 
 	if (xRoad == true) {
-		vector.Set(2.0f, 10.0f, 23.0f);
+		vector.Set(1.0f, 10.0f, 25.0f);
 		tmpCube->size = vector;
+		tmpCube->SetPos(x + 24.5f, 5.0f, z - 2.5f);
 	}
 	else {
-		vector.Set(23.0f, 10.0f, 2.0f);
+		vector.Set(25.0f, 10.0f, 1.0f);
 		tmpCube->size = vector;
+		tmpCube->SetPos(x - 2.5f, 5.0f, z + 24.5f);
 	}
 
 	tmpCube->color.Set(1.0f, 0.0f, 0.0f);
-	tmpCube->SetPos(x, 5.0f, z);
 
 	obstacles.add(tmpCube);
 	App->physics->AddBody(*tmpCube, 0.0f);
@@ -412,7 +421,46 @@ void ModuleSceneIntro::GenerateGroundBarriers(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateLampPosts(float x, float z, bool xRoad)
 {
+	float lampWidth = 1.0f;
 
+	if (xRoad == true) {
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j += 2) {
+				Cube* tmpCube = new Cube(lampWidth, 14.0f, lampWidth);
+				tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+				tmpCube->SetPos(x + (14.0f * i), 7.0f, z + (8.0f * j));
+				obstacles.add(tmpCube);
+				App->physics->AddBody(*tmpCube, 0.0f);
+
+				Cube* lampTop = new Cube(2.5f, 1.0f, 4.0f);
+				lampTop->color.Set(1.0f, 0.0f, 0.0f);
+				lampTop->SetPos(x + (14.0f * i), 14.0f - 0.5f, z + (8.0f * j) - (j * 2.0f + j * lampWidth / 2));
+				obstacles.add(lampTop);
+				App->physics->AddBody(*lampTop, 0.0f);
+			}
+		}
+	}
+	else {
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j += 2) {
+				Cube* tmpCube = new Cube(lampWidth, 14.0f, lampWidth);
+				tmpCube->color.Set(1.0f, 0.0f, 0.0f);
+				tmpCube->SetPos(x + (8.0f * j), 7.0f, z + (14.0f * i));
+				obstacles.add(tmpCube);
+				App->physics->AddBody(*tmpCube, 0.0f);
+
+				Cube* lampTop = new Cube(4.0f, 1.0f, 2.5f);
+				lampTop->color.Set(1.0f, 0.0f, 0.0f);
+				lampTop->SetPos(x + (8.0f * j) - (j * 2.0f + j * lampWidth / 2), 14.0f - 0.5f, z + (14.0f * i));
+				obstacles.add(lampTop);
+				App->physics->AddBody(*lampTop, 0.0f);
+			}
+		}
+	}
+
+	Cube* tmpCube = new Cube(5.0f, 10.0f, 5.0f);
+	tmpCube->color.Set(1.0f, 1.0f, 1.0f);
+	tmpCube->SetPos(x, 10.0f / 2, z);
 }
 
 void ModuleSceneIntro::GenerateBusStop(float x, float z, bool xRoad)
