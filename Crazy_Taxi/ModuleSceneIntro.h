@@ -50,6 +50,21 @@ struct CityData {
 	int randHeight = (int)(maxHeight - minHeight) + 1;
 };
 
+struct TaxiStop {
+	Cube* pole = nullptr;
+	Cube* sign = nullptr;
+
+	TaxiStop(float x, float y, float z) {
+		pole = new Cube(x, y, z);
+		sign = new Cube(4.0f, 2.0f, 1.0f);
+	}
+
+	~TaxiStop() {
+		delete pole;
+		delete sign;
+	}
+};
+
 //CHANGE/FIX DIDAC
 
 class ModuleSceneIntro : public Module
@@ -66,7 +81,7 @@ public:
 
 private:
 	Cube* GenerateBuilding(float x, float z);
-	Cube* GenerateCrossing(float x, float z);
+	TaxiStop* GenerateCrossing(float x, float z);
 	RoadObstacle GenerateRoad(float x, float z, bool xRoad);
 
 	void GenerateRamp(float x, float z, bool xRoad);
@@ -126,6 +141,7 @@ public:
 	p2List<Cube*> buildings;
 	p2List<Primitive*> obstacles;
 	p2List<Primitive*> objects;
+	p2List<TaxiStop*> goals;
 
 	Timer disco;	//BPM 140 (2.33333 BPS)
 	Uint32 discoDelay = 428;
