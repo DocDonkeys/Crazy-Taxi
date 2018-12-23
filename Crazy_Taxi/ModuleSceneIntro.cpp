@@ -39,6 +39,7 @@ bool ModuleSceneIntro::Start()
 	//TESTING Didac
 	test->SetAsSensor(true);
 	test->collision_listeners.add(this);
+	vec3 testPosition = test->GetPosition();
 	
 	//Test Carles
 	float cityStart = 300.0f;
@@ -242,7 +243,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if (body1 == test)
 	{
-		int workpls = 1;
+		
 	}
 }
 

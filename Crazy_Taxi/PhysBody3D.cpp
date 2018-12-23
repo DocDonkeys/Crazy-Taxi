@@ -1,5 +1,6 @@
 #include "PhysBody3D.h"
 #include "glmath.h"
+#include "Primitive.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
 // =================================================
@@ -60,4 +61,20 @@ void PhysBody3D::SetAsSensor(bool is_sensor)
 		else
 			body->setCollisionFlags(body->getCollisionFlags() &~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	}
+}
+
+vec3 PhysBody3D::GetPosition()
+{
+	vec3 pos;
+	Cube auxCube(1,1,1);
+	this->GetTransform(&auxCube.transform);
+
+
+
+	pos.x = auxCube.transform[12];
+	pos.y = auxCube.transform[13];
+	pos.z = auxCube.transform[14];
+
+
+	return pos;
 }
