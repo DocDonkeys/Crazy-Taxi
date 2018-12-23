@@ -167,5 +167,7 @@ public:
 
 
 	TaxiStop* game_destinations[5];
-	p2List<PhysBody3D*> taxiStops_sensors;
+	PhysBody3D* taxiStop_sensor;
+	vec3 taxiStop_positions[5];
+	uint nextStop = 0;
 };
