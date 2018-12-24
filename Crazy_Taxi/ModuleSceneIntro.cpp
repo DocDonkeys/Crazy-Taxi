@@ -59,8 +59,8 @@ bool ModuleSceneIntro::Start()
 	{
 		taxiStop_positions[i] = game_destinations[i]->pole->GetPosition();
 	}
-	game_destinations[0]->pole->color.Set(1.0f,1.0f,0.0f);
-	game_destinations[0]->sign->color.Set(1.0f, 1.0f, 0.0f);
+	game_destinations[nextStop]->pole->color.Set(1.0f,1.0f,0.0f);
+	game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
 	//Place Test sensor in all of the Taxi Stops
 	Cube sensor(8, 4, 8);
 	sensor.SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5, taxiStop_positions[nextStop].z);
@@ -828,4 +828,22 @@ void ModuleSceneIntro::ChooseGameplayGoals()
 	{
 		goals.at(indexes[i], game_destinations[i]);
 	}
+}
+
+void ModuleSceneIntro::StartNewGame()
+{
+	//Recolor to white the current goal independently of its color
+	if (nextStop < 5)
+	{
+		game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 1.0f);
+		game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 1.0f);
+	}
+	//Reset the index to the start
+	nextStop = 0;
+	game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
+	game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
+	taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5, taxiStop_positions[nextStop].z);
+	max_time = 120;
+	time_passed.Start();
+	lost = false;
 }
