@@ -159,7 +159,8 @@ public:
 
 	//Arrow
 	Cylinder arrowtest;
-	
+	float flagDetectionRadius = 800.0f;
+
 	TaxiStop* game_destinations[5];
 	PhysBody3D* taxiStop_sensor;
 	vec3 taxiStop_positions[5];

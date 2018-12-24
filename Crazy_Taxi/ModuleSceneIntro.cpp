@@ -176,11 +176,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	
 	float distance_mod = (float)sqrt(distance_x*distance_x + distance_z*distance_z);
 	
-	if (distance_mod > 800.0f)
-		distance_mod = 800.0f;
+	if (distance_mod > flagDetectionRadius)
+		distance_mod = flagDetectionRadius;
 
-	float red = (800.0f - distance_mod) / 800.0f;
-	float green = distance_mod / 800.0f;
+	float red = (flagDetectionRadius - distance_mod) / flagDetectionRadius;
+	float green = distance_mod / flagDetectionRadius;
 	
 	arrowtest.color.Set(red, green, 0.0f, 1.0f);
 
