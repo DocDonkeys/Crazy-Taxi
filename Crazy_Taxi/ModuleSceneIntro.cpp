@@ -279,7 +279,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		loseTimer.Start();
 		lost = true;
 	}
-	else if (lost && loseTimer.Read() > loseTime * 1000) {
+	else if (lost && loseTimer.Read() > loseTime * 1000 || App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
 		return UPDATE_STOP;
 	}
 

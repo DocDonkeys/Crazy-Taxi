@@ -54,15 +54,24 @@ void PhysVehicle3D::Render()
 	btVector3 sign_offset(info.sign_offset.x, info.sign_offset.y, info.sign_offset.z);
 	sign_offset = sign_offset.rotate(q.getAxis(), q.getAngle());
 
-	sign.color.Set(0.2f, 0.2f, 0.2f);
+	sign.color.Set(0.0f, 0.7f, 0.0f);
 	sign.transform.M[12] += sign_offset.getX();
 	sign.transform.M[13] += sign_offset.getY();
 	sign.transform.M[14] += sign_offset.getZ();
 
+	Cube top(info.top_size.x, info.top_size.y, info.top_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&top.transform);
+	btVector3 top_offset(info.top_offset.x, info.top_offset.y, info.top_offset.z);
+	top_offset = top_offset.rotate(q.getAxis(), q.getAngle());
 
+	top.color.Set(0.1f, 0.1f, 0.1f);
+	top.transform.M[12] += top_offset.getX();
+	top.transform.M[13] += top_offset.getY();
+	top.transform.M[14] += top_offset.getZ();
 
 	chassis.Render();
 	sign.Render();
+	top.Render();
 }
 
 // ----------------------------------------------------------------------------

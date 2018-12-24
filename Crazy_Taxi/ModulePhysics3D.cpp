@@ -303,6 +303,9 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	btCollisionShape* sign_colShape = new btBoxShape(btVector3(info.sign_size.x*0.5f, info.sign_size.y*0.5f, info.sign_size.z*0.5f));
 	shapes.add(sign_colShape);
 
+	btCollisionShape* top_colShape = new btBoxShape(btVector3(info.top_size.x*0.5f, info.top_size.y*0.5f, info.top_size.z*0.5f));
+	shapes.add(top_colShape);
+
 	btTransform trans;
 	trans.setIdentity();
 	trans.setOrigin(btVector3(info.chassis_offset.x, info.chassis_offset.y, info.chassis_offset.z));
@@ -310,6 +313,8 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	comShape->addChildShape(trans, colShape);
 	trans.setOrigin(btVector3(info.sign_offset.x, info.sign_offset.y, info.sign_offset.z));
 	comShape->addChildShape(trans, sign_colShape);
+	trans.setOrigin(btVector3(info.top_offset.x, info.top_offset.y, info.top_offset.z));
+	comShape->addChildShape(trans, top_colShape);
 
 	btTransform startTransform;
 	startTransform.setIdentity();
