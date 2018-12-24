@@ -143,8 +143,8 @@ public:
 	int x, y, z = 0;
 	float angle = 0;
 
-	int distance_x;
-	int distance_z;
+	float distance_x;
+	float distance_z;
 
 	//Carles
 	CityData city;
@@ -168,6 +168,8 @@ public:
 	int time_left;
 	int max_time = 120;
 	Timer time_passed;
+	Timer goalTimer;
+	int goalCollisionDelay = 1000;
+	bool collided = false;
 	bool lost = false;
-	bool collided = false; //Avoids double OnCollision call
 };
