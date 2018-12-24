@@ -5,7 +5,7 @@
 #include "SDL_mixer\include\SDL_mixer.h"
 #include "p2SString.h"
 
-#define DEFAULT_MUSIC_FADE_TIME 2.0f
+#define DEFAULT_MUSIC_FADE_TIME 0.5f
 
 struct sfx
 {

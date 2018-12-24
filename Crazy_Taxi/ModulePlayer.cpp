@@ -21,7 +21,9 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	CreatePlayer(0,12,10);
+	CreatePlayer(0,4,10);
+	
+	App->physics->SetVehicleRotation(vehicle,180);
 	
 	return true;
 }
@@ -93,7 +95,14 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Render();
 
 	char title[80];
-	sprintf_s(title, "%.1f Km/h, Stopped = %d, angle = %f, Time left= %d", vehicle->GetKmh(), (int)stopped, App->scene_intro->angle,App->scene_intro->time_left);
+	if (App->scene_intro->lost == false)
+	{
+		sprintf_s(title, "%.1f Km/h, Stopped = %d, Time left= %d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+	}
+	else if (App->scene_intro->lost == true)
+	{
+		sprintf_s(title, "%.1f Km/h, Stopped = %d,Time left= %d, GAME OVER You LOST! Press R to Restart the game", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+	}
 	App->window->SetTitle(title);
 
 	App->camera->LookAt(vehicle->GetPosition());
@@ -201,7 +210,7 @@ void ModulePlayer::CreatePlayer(float x, float y, float z)
 void ModulePlayer::ReStartPlayer()
 {
 	stopped = false;
-	vehicle->SetPos(0,12,10);
+	vehicle->SetPos(0,4,10);
 	App->physics->SetVehicleRotation(vehicle,180);
 }
 

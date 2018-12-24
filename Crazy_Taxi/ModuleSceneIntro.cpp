@@ -26,6 +26,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	time_left = max_time;
+
 	//Rand seed based on current time
 	srand((uint)time(NULL));
 
@@ -188,7 +190,11 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	//CHANGE/FIX ARROWTEST ENDS HERE
 
-	time_left = int(max_time - time_passed.Read() / 1000.0f);
+	if (time_left > 0)
+	{
+		time_left = int(max_time - time_passed.Read() / 1000.0f);
+	}
+	
 
 	if (time_left <= 0 && lost == false) {
 		App->audio->PlayFx(App->audio->lose.id);
@@ -223,6 +229,9 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			}
 			else if (nextStop >= 5)
 			{
+				game_destinations[4]->pole->color.Set(0.0f, 0.0f, 1.0f);
+				game_destinations[4]->sign->color.Set(0.0f, 0.0f, 1.0f);
+				taxiStop_sensor->SetPos(0, 100, 0);
 				App->audio->PlayFx(App->audio->win.id);
 				time_passed.Stop();
 			}
@@ -843,9 +852,14 @@ void ModuleSceneIntro::StartNewGame()
 	game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
 	game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
 	taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5, taxiStop_positions[nextStop].z);
-	max_time = 120;
+	time_left = max_time;
 	time_passed.Start();
 	lost = false;
+	won = false;
 
 	App->player->ReStartPlayer();
+
+	App->audio->PlayMusic("audio/music/Yellow_Line.ogg");
+	App->audio->SetMusicVolume(30);
+	disco.Start();
 }

@@ -175,4 +175,5 @@ public:
 	int goalCollisionDelay = 1000;
 	bool collided = false;
 	bool lost = false;
+	bool won = false;
 };
