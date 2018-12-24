@@ -118,6 +118,8 @@ private:
 
 	void ChooseGameplayGoals();
 
+	void StartNewGame();
+
 public:
 	/*
 	PhysBody3D* pb_snake[MAX_SNAKE];
