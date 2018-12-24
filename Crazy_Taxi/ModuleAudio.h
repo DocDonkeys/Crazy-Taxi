@@ -6,6 +6,12 @@
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
+struct sfx
+{
+	const char* file;
+	int id;
+};
+
 class ModuleAudio : public Module
 {
 public:
@@ -15,6 +21,8 @@ public:
 
 	bool Init();
 	bool CleanUp();
+
+	bool Start();
 
 	// Play a music file
 	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
@@ -30,6 +38,10 @@ public:
 		musicVolume = (unsigned __int8)volume;
 		Mix_VolumeMusic(masterVolume * (musicVolume * MIX_MAX_VOLUME / 100) / 100);
 	}
+
+public:
+	sfx thankYou;
+
 private:
 
 	Mix_Music*			music;

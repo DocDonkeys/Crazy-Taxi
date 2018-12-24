@@ -282,6 +282,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if (body1 == taxiStop_sensor && App->player->stopped == true)
 	{
+		App->audio->PlayFx(App->audio->thankYou.id);
 		nextStop++;
 		if (nextStop < 5)
 		{

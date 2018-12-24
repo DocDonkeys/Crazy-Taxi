@@ -44,6 +44,15 @@ bool ModuleAudio::Init()
 	return ret;
 }
 
+bool ModuleAudio::Start()
+{
+	thankYou.file = "audio/Thank_You.wav";
+	thankYou.id = 1;
+
+	LoadFx(thankYou.file);
+	return true;
+}
+
 // Called before quitting
 bool ModuleAudio::CleanUp()
 {
