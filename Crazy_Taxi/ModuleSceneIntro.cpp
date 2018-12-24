@@ -26,21 +26,6 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-
-	//Stuff to test
-	Cube* CubeTest = new Cube(2, 1, 2);
-	CubeTest->SetPos(0, 2.5f, 10);
-	CubeTest->color.Set(0, 200, 100);
-
-	c1 = CubeTest;
-	
-	test = App->physics->AddBody(*c1,0.0f);
-
-	//TESTING Didac
-	test->SetAsSensor(true);
-	test->collision_listeners.add(this);
-	vec3 testPosition = test->GetPosition();
-
 	//Rand seed based on current time
 	srand((uint)time(NULL));
 
@@ -72,10 +57,6 @@ bool ModuleSceneIntro::Start()
 	//TESTING DIDAC
 	for (int i = 0; i < 5; ++i)
 	{
-		/*game_destinations[i]->pole->color.Set(1.0f, 1.0f, 0);
-		game_destinations[i]->sign->color.Set(1.0f, 1.0f, 0);*/
-
-		//Place Test sensor in all of the Taxi Stops
 		taxiStop_positions[i] = game_destinations[i]->pole->GetPosition();
 	}
 	game_destinations[0]->pole->color.Set(1.0f,1.0f,0.0f);
@@ -87,13 +68,9 @@ bool ModuleSceneIntro::Start()
 	taxiStop_sensor->SetAsSensor(true);
 	taxiStop_sensor->collision_listeners.add(App->scene_intro);
 
-
 	//ARROW
 	arrowtest.radius = 0.5;
 	arrowtest.height = 3;
-	
-	//arrowtest.SetPos(15.0f, 10.0f, 15.0f);
-	//arrow_cylinder->SetPos(15.0f, 10.0f, 15.0f);
 
 	//Music:
 	App->audio->PlayMusic("audio/music/Yellow_Line.ogg");
@@ -143,8 +120,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	ground.color.Set(0.2f,0.2f,0.2f);
 	ground.Render();
 
-	c1->Render();
-
 	//Check Disco Update
 	if (disco.Read() > discoDelay) {
 		for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {
@@ -175,32 +150,13 @@ update_status ModuleSceneIntro::Update(float dt)
 		item->data->sign->Render();
 	}
 
-	Cube c(2,1,2);
-	c.SetPos(15,1,30);
-	c.color.Set(0,255,0,200.0f);
-	c.Render();
-
 	//CHANGE/FIX Dídac: Testing some kind of arrow pointing to the destination
 	arrowtest.color.Set(128, 128, 0, 0.7f);
 	
 	vec3 arrowpos = App->player->vehicle->GetPosition() + App->player->vehicle->GetForwardVec() + vec3(0,5,0);
-	vec3 test(1,0,0);
 
-	
-	/*arrowtest.transform.look(vec3(arrowpos.x, arrowpos.y, arrowpos.z), vec3(15, 1, 30),  vec3(0,1.0f,0));
-	
-	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);*/
-	//arrowtest.SetRotation(90, test);
-	
-
-	//arrowtest.SetRotation();
-	//arrowtest.LookAt(arrowpos,vec3(15, 1, 30));
-	//arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
-
-	
 	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 	
-	//HERE WE MIGHT HAVE IT BOIIIIIIIIIIIIIIII
 	vec3 objPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y, taxiStop_positions[nextStop].z);
 
 	distance_x = objPos.x - arrowpos.x;
@@ -212,26 +168,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		tan = distance_z / distance_x;
 	}
-	
-	//angle = atan2(distance_z , distance_x);
-
-	//ONCE we have the angle
-	/*if (distance_x > 0 && distance_z > 0)
-	{
-		angle = -RADTODEG * atanf(tan);
-	}
-	else if (distance_x < 0 && distance_z > 0)
-	{
-		angle = -180 + RADTODEG * atanf(tan);
-	}
-	else if (distance_x < 0 && distance_z < 0)
-	{
-		angle = RADTODEG * atanf(tan);
-	}
-	else if (distance_x > 0 && distance_z < 0)
-	{
-		angle = 180 - RADTODEG * atanf(tan);
-	}*/
 
 	angle = -RADTODEG * atanf(tan);
 
