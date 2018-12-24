@@ -37,8 +37,8 @@ feature'`
 
 * [Repository](https://github.com/DocDonkeys/Crazy-Taxi)
 
-![Team Photo](https://raw.githubusercontent.com/Scotland-Fury/Hook_Platformer/master/Wiki%20Material/Team_Photo.png)
-*Samuel & Carles from Scotland Fury*
+![Team Photo](https://raw.githubusercontent.com/DocDonkeys/Crazy-Taxi/gh-pages/Team_Photo.png)
+*Dídac and Carles from Doc Donkeys*
 
 ## Disclosure
 We do not own any of the audio used for the game. Authors credited below.
