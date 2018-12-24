@@ -96,7 +96,7 @@ bool ModuleSceneIntro::Start()
 	//arrow_cylinder->SetPos(15.0f, 10.0f, 15.0f);
 
 	//Music:
-	App->audio->PlayMusic("audio/Yellow_Line.ogg");
+	App->audio->PlayMusic("audio/music/Yellow_Line.ogg");
 	App->audio->SetMusicVolume(30);
 	disco.Start();
 
@@ -253,18 +253,26 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	time_left = int(max_time - time_passed.Read() / 1000.0f);
 
+	if (time_left <= 0 && lost == false) {
+		App->audio->PlayFx(App->audio->lose.id);
+		lost = true;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+		lost = false;
+		return UPDATE_STOP;	//Should restart game & goals
+	}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if (body1 == taxiStop_sensor && App->player->stopped == true)
+	if (body1 == taxiStop_sensor && App->player->stopped == true && lost == false)
 	{
-			App->audio->PlayFx(App->audio->thankYou.id);
-      		nextStop++;
+      	nextStop++;
 		if (nextStop < 5)
 		{
+			App->audio->PlayFx(App->audio->goal.id);
 			game_destinations[nextStop - 1]->pole->color.Set(1.0f, 1.0f, 1.0f);
 			game_destinations[nextStop - 1]->sign->color.Set(1.0f, 1.0f, 1.0f);
 
@@ -275,6 +283,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		}
 		else if (nextStop >= 5)
 		{
+			App->audio->PlayFx(App->audio->win.id);
 			time_passed.Stop();
 		}
 	}
