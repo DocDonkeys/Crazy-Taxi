@@ -269,25 +269,30 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if (body1 == taxiStop_sensor && App->player->stopped == true && lost == false)
 	{
-      	nextStop++;
-		if (nextStop < 5)
-		{
-			App->audio->PlayFx(App->audio->goal.id);
-			game_destinations[nextStop - 1]->pole->color.Set(1.0f, 1.0f, 1.0f);
-			game_destinations[nextStop - 1]->sign->color.Set(1.0f, 1.0f, 1.0f);
-
-			taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y-2.5f, taxiStop_positions[nextStop].z);
-			game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
-			game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
-			max_time += 30;
+		if (collided) {
+			collided = false;
 		}
-		else if (nextStop >= 5)
-		{
-			App->audio->PlayFx(App->audio->win.id);
-			time_passed.Stop();
+		else {
+			collided = true;
+			nextStop++;
+			if (nextStop < 5)
+			{
+				App->audio->PlayFx(App->audio->goal.id);
+				game_destinations[nextStop - 1]->pole->color.Set(1.0f, 1.0f, 1.0f);
+				game_destinations[nextStop - 1]->sign->color.Set(1.0f, 1.0f, 1.0f);
+
+				taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5f, taxiStop_positions[nextStop].z);
+				game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
+				game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
+				max_time += 30;
+			}
+			else if (nextStop >= 5)
+			{
+				App->audio->PlayFx(App->audio->win.id);
+				time_passed.Stop();
+			}
 		}
 	}
-	int workpls = 1;
 }
 
 int ModuleSceneIntro::CreateCityBuildings()

@@ -139,14 +139,12 @@ public:
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;
 
-
 	//Vars to test
 	int x, y, z = 0;
 	float angle = 0;
 
 	int distance_x;
 	int distance_z;
-	
 
 	//Testing Sensors
 	PhysBody3D* test;
@@ -170,15 +168,14 @@ public:
 	Cube arrow_cube;
 	PhysBody3D* arrow_end;
 
-
 	TaxiStop* game_destinations[5];
 	PhysBody3D* taxiStop_sensor;
 	vec3 taxiStop_positions[5];
 	uint nextStop = 0;
 
-
 	int time_left;
 	int max_time = 120;
 	Timer time_passed;
 	bool lost = false;
+	bool collided = false; //Avoids double OnCollision call
 };
