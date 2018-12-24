@@ -91,24 +91,9 @@ bool ModuleSceneIntro::Start()
 	//ARROW
 	arrowtest.radius = 0.5;
 	arrowtest.height = 3;
-
-	arrow_cylinder = App->physics->AddBody(arrowtest, 0.0f);
-
-	arrow_cube.Scale(0.5f,0.5f,0.5f);
-	arrow_cube.color.Set(0, 1.0f, 0);
-
-	arrow_end = App->physics->AddBody(arrow_cube, 1999999.0f);
-	arrow_cylinder->SetAsSensor(true);
 	
 	//arrowtest.SetPos(15.0f, 10.0f, 15.0f);
 	//arrow_cylinder->SetPos(15.0f, 10.0f, 15.0f);
-
-	arrow_end->SetPos(15.0f, 15.0f, 15.0f);
-	arrow_cube.SetPos(15.0f, 10.0f, 15.0f);
-	arrow_end->SetAsSensor(true);
-
-	App->physics->AddConstraintP2P(*arrow_cylinder, *arrow_end, vec3(1.5f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f));
-	
 
 	//Music:
 	App->audio->PlayMusic("audio/Yellow_Line.ogg");
@@ -212,35 +197,9 @@ update_status ModuleSceneIntro::Update(float dt)
 	//arrowtest.LookAt(arrowpos,vec3(15, 1, 30));
 	//arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
-	{
-		x += 1;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
-	{
-		z += 1;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	{
-		y += 1;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
-	{
-		angle+= 1;
-	}
-
 	
 	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
-	//arrow_cylinder->SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 	
-	
-	//arrowtest.SetRotation(angle,vec3(x,y,z));
-	//arrowtest.transform.M[4] = angle;
-
-
-
-
 	//HERE WE MIGHT HAVE IT BOIIIIIIIIIIIIIIII
 	vec3 objPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y, taxiStop_positions[nextStop].z);
 
@@ -255,20 +214,40 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	
 	//angle = atan2(distance_z , distance_x);
-	angle = - RADTODEG * atanf(tan);
+
+	//ONCE we have the angle
+	/*if (distance_x > 0 && distance_z > 0)
+	{
+		angle = -RADTODEG * atanf(tan);
+	}
+	else if (distance_x < 0 && distance_z > 0)
+	{
+		angle = -180 + RADTODEG * atanf(tan);
+	}
+	else if (distance_x < 0 && distance_z < 0)
+	{
+		angle = RADTODEG * atanf(tan);
+	}
+	else if (distance_x > 0 && distance_z < 0)
+	{
+		angle = 180 - RADTODEG * atanf(tan);
+	}*/
+
+	angle = -RADTODEG * atanf(tan);
 
 	
 	arrowtest.SetRotation(angle,vec3(0,1,0));
 	
+	int distance_mod = sqrt(distance_x*distance_x + distance_z*distance_z);
 	
-	//arrowtest.transform.M[6] = angle;
+	if (distance_mod > 100)
+		distance_mod = 100;
 
-
-	arrow_cylinder->SetTransform(&arrowtest.transform);
-	arrow_end->GetTransform(&arrow_cube.transform);
+	arrowtest.color.Set(float((100 - distance_mod)/100), float(distance_mod / 100),0.0f,1.0f);
 	
+	
+
 	arrowtest.Render();
-	arrow_cube.Render();
 
 	//CHANGE/FIX ARROWTEST ENDS HERE
 
@@ -282,8 +261,8 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if (body1 == taxiStop_sensor && App->player->stopped == true)
 	{
-		App->audio->PlayFx(App->audio->thankYou.id);
-		nextStop++;
+			App->audio->PlayFx(App->audio->thankYou.id);
+      		nextStop++;
 		if (nextStop < 5)
 		{
 			game_destinations[nextStop - 1]->pole->color.Set(1.0f, 1.0f, 1.0f);

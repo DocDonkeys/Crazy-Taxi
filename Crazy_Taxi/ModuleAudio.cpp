@@ -46,10 +46,19 @@ bool ModuleAudio::Init()
 
 bool ModuleAudio::Start()
 {
-	thankYou.file = "audio/Thank_You.wav";
-	thankYou.id = 1;
+	goal.file.create("%s%s", sfxFolder.GetString(), "Goal.wav");
+	goal.id = 1;
 
-	LoadFx(thankYou.file);
+	win.file.create("%s%s", sfxFolder.GetString(), "Win.wav");
+	win.id = 2;
+
+	lose.file.create("%s%s", sfxFolder.GetString(), "Game_Over.wav");
+	lose.id = 3;
+
+	LoadFx(goal.file.GetString());
+	LoadFx(win.file.GetString());
+	LoadFx(lose.file.GetString());
+
 	return true;
 }
 
