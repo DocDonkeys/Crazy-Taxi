@@ -134,6 +134,8 @@ void ModulePlayer::CreatePlayer(float x, float y, float z)
 	// Car properties ----------------------------------------
 	car.chassis_size.Set(3, 1, 4);
 	car.chassis_offset.Set(0, 1.0, 0);
+	car.sign_size.Set(2, 1, 1);
+	car.sign_offset.Set(-0.5,1.5,-1);
 	car.mass = 650.0f;
 	car.suspensionStiffness = 30.0f;
 	car.suspensionCompression = 1.0f;
