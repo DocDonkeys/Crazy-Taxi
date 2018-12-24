@@ -3,12 +3,13 @@
 
 #include "Module.h"
 #include "SDL_mixer\include\SDL_mixer.h"
+#include "p2SString.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
 struct sfx
 {
-	const char* file;
+	p2SString file;
 	int id;
 };
 
@@ -40,9 +41,13 @@ public:
 	}
 
 public:
-	sfx thankYou;
+	sfx goal;
+	sfx win;
+	sfx lose;
 
 private:
+	p2SString musicFolder = "audio/music/";
+	p2SString sfxFolder = "audio/sfx/";
 
 	Mix_Music*			music;
 	p2List<Mix_Chunk*>	fx;
