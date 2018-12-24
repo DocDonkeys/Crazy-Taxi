@@ -97,7 +97,8 @@ bool ModuleSceneIntro::Start()
 	arrow_cube.Scale(0.5f,0.5f,0.5f);
 	arrow_cube.color.Set(0, 1.0f, 0);
 
-	arrow_end = App->physics->AddBody(arrow_cube, 10.0f);
+	arrow_end = App->physics->AddBody(arrow_cube, 1999999.0f);
+	arrow_cylinder->SetAsSensor(true);
 	
 	//arrowtest.SetPos(15.0f, 10.0f, 15.0f);
 	//arrow_cylinder->SetPos(15.0f, 10.0f, 15.0f);
@@ -195,7 +196,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	c.Render();
 
 	//CHANGE/FIX Dídac: Testing some kind of arrow pointing to the destination
-	arrowtest.color.Set(128, 128, 0, 200.0f);
+	arrowtest.color.Set(128, 128, 0, 0.7f);
 	
 	vec3 arrowpos = App->player->vehicle->GetPosition() + App->player->vehicle->GetForwardVec() + vec3(0,5,0);
 	vec3 test(1,0,0);
@@ -231,7 +232,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	
 	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
-	arrow_cylinder->SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
+	//arrow_cylinder->SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
+	
+	
 	//arrowtest.SetRotation(angle,vec3(x,y,z));
 	//arrowtest.transform.M[4] = angle;
 
@@ -259,8 +262,13 @@ update_status ModuleSceneIntro::Update(float dt)
 	
 	
 	//arrowtest.transform.M[6] = angle;
-	arrowtest.Render();
 
+
+	arrow_cylinder->SetTransform(&arrowtest.transform);
+	arrow_end->GetTransform(&arrow_cube.transform);
+	
+	arrowtest.Render();
+	arrow_cube.Render();
 
 	//CHANGE/FIX ARROWTEST ENDS HERE
 
