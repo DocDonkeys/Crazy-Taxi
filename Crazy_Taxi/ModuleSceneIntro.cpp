@@ -196,7 +196,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
 		lost = false;
-		return UPDATE_STOP;	//Should restart game & goals
+		StartNewGame();
 	}
 
 	return UPDATE_CONTINUE;
@@ -846,4 +846,6 @@ void ModuleSceneIntro::StartNewGame()
 	max_time = 120;
 	time_passed.Start();
 	lost = false;
+
+	App->player->ReStartPlayer();
 }
