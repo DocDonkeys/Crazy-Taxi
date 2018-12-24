@@ -390,7 +390,7 @@ TaxiStop* ModuleSceneIntro::GenerateGoal(float x, float z)
 
 ObstacleType ModuleSceneIntro::GenerateObstacle(float x, float z, bool xRoad)
 {
-	ObstacleType obstacle = ObstacleType::NONE;//(ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
+	ObstacleType obstacle = (ObstacleType)(rand() % (int)ObstacleType::MAX_TYPES);
 
 	switch (obstacle)
 	{
@@ -795,12 +795,47 @@ void ModuleSceneIntro::GenerateBoxes(float x, float z, bool xRoad)
 
 void ModuleSceneIntro::GenerateSmallBarriers(float x, float z, bool xRoad)
 {
+	for (int i = -1; i < 2; i += 2) {
+		Obstacle* barrier = new Obstacle;
 
+		barrier->shape = new Cube(6.0f, 4.0f, 1.0f);
+		barrier->shape->SetPos(x + (i * 5.0f), 2.0f, z + (i * 5.0f));
+		barrier->shape->color.Set(0.0f, 0.3f, 0.0f);
+		barrier->dynamic = true;
+		barrier->shape->SetRotation(45.0f, vec3(0.0f, 1.0f, 0.0f));
+
+		barrier->body = App->physics->AddBody(*(Cube*)barrier->shape, 200.0f);
+		obstacles.add(barrier);
+	}
 }
 
 void ModuleSceneIntro::GenerateSign(float x, float z, bool xRoad)
 {
+	Obstacle* pole = new Obstacle;
+	Obstacle* sign = new Obstacle;
 
+	if (xRoad == true) {
+		pole->shape = new Cube(1.0f, 8.0f, 1.0f);
+		sign->shape = new Cube(1.0f, 2.0f, 5.0f);
+	}
+	else {
+		pole->shape = new Cube(1.0f, 8.0f, 1.0f);
+		sign->shape = new Cube(5.0f, 2.0f, 1.0f);
+	}
+	pole->shape->SetPos(x + 6.0f, 4.0f, z + 6.0f);
+	sign->shape->SetPos(x + 6.0f, 9.0f, z + 6.0f);
+
+	pole->shape->color.Set(0.0f, 0.4f, 0.0f);
+	sign->shape->color.Set(0.0f, 0.8f, 0.0f);
+
+	pole->dynamic = sign->dynamic = true;
+
+	pole->body = App->physics->AddBody(*(Cube*)pole->shape, 50.0f);
+	sign->body = App->physics->AddBody(*(Cube*)sign->shape, 50.0f);
+	obstacles.add(pole);
+	obstacles.add(sign);
+
+	App->physics->AddConstraintP2P(*pole->body, *sign->body, vec3(0.0f, 5.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f));
 }
 
 void ModuleSceneIntro::GenerateWreckingBall(float x, float z, bool xRoad)
@@ -814,7 +849,7 @@ void ModuleSceneIntro::GenerateWreckingBall(float x, float z, bool xRoad)
 
 	Obstacle* ball = new Obstacle;
 	ball->shape = new Sphere(4.0f);
-	ball->shape->color.Set(0.0f, 0.0f, 0.0f);
+	ball->shape->color.Set(0.0f, 0.1f, 0.0f);
 	ball->dynamic = true;
 
 	if (xRoad == true) {
