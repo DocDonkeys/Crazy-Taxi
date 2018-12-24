@@ -3,7 +3,7 @@ This is a university project made by [CITM](https://www.citm.upc.edu/ing/) (Cent
 
 Crazy Taxi (our version) is a physics-based racing game where you have to transport passangers to randomly located points in a randomly generated city full of obstacles.
 
-Feel free to visit our [Webpage]()
+Check our latest [Release]()!
 
 ## Installation
 No previous installations is required to play the game, just download and execute the .exe file *Crazy Taxi* from releases.
@@ -44,7 +44,7 @@ feature'`
 We do not own any of the audio used for the game. Authors credited below.
 
 * Music:
-	* Yellow Line - James Shimoji
+	* [Yellow Line - James Shimoji](https://www.youtube.com/watch?v=Ok2369YY2P8)
 
 * Sfx:
 	* Royalty Free Sfx
