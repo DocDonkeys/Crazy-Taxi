@@ -276,11 +276,11 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (time_left <= 0 && lost == false) {
 		App->audio->PlayFx(App->audio->lose.id);
-		loseTimer.Start();
 		lost = true;
 	}
-	else if (lost && loseTimer.Read() > loseTime * 1000 || App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
-		return UPDATE_STOP;
+	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+		lost = false;
+		return UPDATE_STOP;	//Should restart game & goals
 	}
 
 	return UPDATE_CONTINUE;

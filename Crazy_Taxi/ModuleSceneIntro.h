@@ -180,7 +180,5 @@ public:
 	int time_left;
 	int max_time = 120;
 	Timer time_passed;
-	Timer loseTimer;
-	int loseTime = 5;
 	bool lost = false;
 };
