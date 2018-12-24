@@ -146,10 +146,6 @@ public:
 	float distance_x;
 	float distance_z;
 
-	//Testing Sensors
-	PhysBody3D* test;
-	Cube* c1;
-
 	//Carles
 	CityData city;
 	p2List<Cube*> buildings;
@@ -163,11 +159,7 @@ public:
 
 	//Arrow
 	Cylinder arrowtest;
-	PhysBody3D* arrow_cylinder;
-
-	Cube arrow_cube;
-	PhysBody3D* arrow_end;
-
+	
 	TaxiStop* game_destinations[5];
 	PhysBody3D* taxiStop_sensor;
 	vec3 taxiStop_positions[5];
