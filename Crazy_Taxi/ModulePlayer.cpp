@@ -42,7 +42,7 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		if (vehicle->GetKmh() < 0.0f) {
-			brake = BRAKE_POWER / 10;
+			brake = BRAKE_POWER;
 		}
 		else {
 			acceleration = MAX_ACCELERATION;
@@ -64,7 +64,7 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 		if (vehicle->GetKmh() > 0.0f)
-			brake = BRAKE_POWER / 4;
+			brake = BRAKE_POWER / 10.0f;
 		else
 			acceleration = -MAX_ACCELERATION / 2;
 	}
@@ -72,9 +72,9 @@ update_status ModulePlayer::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		if (vehicle->GetKmh() > 0.0f)
-			brake = BRAKE_POWER / 4;
+			brake = BRAKE_POWER;
 		else {
-			brake = BRAKE_POWER / 10;
+			brake = BRAKE_POWER / 10.0f;
 		}
 	}
 
@@ -135,11 +135,11 @@ void ModulePlayer::CreatePlayer(float x, float y, float z)
 	car.chassis_size.Set(3, 1, 4);
 	car.chassis_offset.Set(0, 1.0, 0);
 	car.mass = 650.0f;
-	car.suspensionStiffness = 30.88f;
-	car.suspensionCompression = 0.83f;
-	car.suspensionDamping = 2.88f;
-	car.maxSuspensionTravelCm = 1000.0f;
-	car.frictionSlip = 50.5;
+	car.suspensionStiffness = 30.0f;
+	car.suspensionCompression = 1.0f;
+	car.suspensionDamping = 3.0;
+	car.maxSuspensionTravelCm = 500.0f;
+	car.frictionSlip = 10.0;
 	car.maxSuspensionForce = 12000.0f;
 
 	// Wheel properties ---------------------------------------
