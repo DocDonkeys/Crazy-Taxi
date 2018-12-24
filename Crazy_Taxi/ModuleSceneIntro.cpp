@@ -208,9 +208,9 @@ update_status ModuleSceneIntro::Update(float dt)
 	distance_z = objPos.z - arrowpos.z;
 	
 	float tan = M_PI/2;
-	if (distance_x != 0)
+	if (distance_x != 0.0f)
 	{
-		tan = float(distance_z / distance_x);
+		tan = distance_z / distance_x;
 	}
 	
 	//angle = atan2(distance_z , distance_x);
@@ -238,14 +238,15 @@ update_status ModuleSceneIntro::Update(float dt)
 	
 	arrowtest.SetRotation(angle,vec3(0,1,0));
 	
-	int distance_mod = sqrt(distance_x*distance_x + distance_z*distance_z);
+	float distance_mod = (float)sqrt(distance_x*distance_x + distance_z*distance_z);
 	
-	if (distance_mod > 100)
-		distance_mod = 100;
+	if (distance_mod > 500.0f)
+		distance_mod = 500.0f;
 
-	arrowtest.color.Set(float((100 - distance_mod)/100), float(distance_mod / 100),0.0f,1.0f);
+	float red = (500.0f - distance_mod) / 500.0f;
+	float green = distance_mod / 500.0f;
 	
-	
+	arrowtest.color.Set(red, green, 0.0f, 1.0f);
 
 	arrowtest.Render();
 
@@ -269,10 +270,8 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if (body1 == taxiStop_sensor && App->player->stopped == true && lost == false)
 	{
-		if (collided) {
-			collided = false;
-		}
-		else {
+		if (collided == false) {
+			goalTimer.Start();
 			collided = true;
 			nextStop++;
 			if (nextStop < 5)
@@ -291,6 +290,9 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 				App->audio->PlayFx(App->audio->win.id);
 				time_passed.Stop();
 			}
+		}
+		else if (collided && goalTimer.Read() > goalCollisionDelay) {
+			collided = false;
 		}
 	}
 }
