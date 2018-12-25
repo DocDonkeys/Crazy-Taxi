@@ -107,15 +107,15 @@ update_status ModulePlayer::Update(float dt)
 	char title[140];
 	if (App->scene_intro->lost == false && App->scene_intro->won == false)
 	{
-		sprintf_s(title, "%.1f Km/h, Stopped = %d, Time left= %d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+		sprintf_s(title, "Crazy Taxi! %.1f Km/h, Stopped = %d, Time left= %d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
 	}
 	else if (App->scene_intro->lost == true)
 	{
-		sprintf_s(title, "%.1f Km/h, Stopped = %d,Time left= %d, GAME OVER You LOST! Press R to Restart the game", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+		sprintf_s(title, "Crazy Taxi! 0.0 Km/h, Stopped = %d,Time left= %d, GAME OVER You LOST! Press R to Restart the game", (int)stopped, App->scene_intro->time_left);
 	}
 	else if (App->scene_intro->won == true)
 	{
-		sprintf_s(title, "%.1f Km/h, Stopped = %d,Time left= %d, CONGRATULATIONS You WON! Press R to Restart the game", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+		sprintf_s(title, "Crazy Taxi! 0.0 Km/h, Stopped = %d,Time left= %d, CONGRATULATIONS You WON! Press R to Restart the game", (int)stopped, App->scene_intro->time_left);
 	}
 
 	App->window->SetTitle(title);
@@ -225,10 +225,5 @@ void ModulePlayer::CreatePlayer(float x, float y, float z)
 	vehicle->SetPos(x, y, z);
 }
 
-void ModulePlayer::ReStartPlayer()
-{
-	stopped = false;
-	vehicle->SetPos(0,0.5,10);
-}
 
 

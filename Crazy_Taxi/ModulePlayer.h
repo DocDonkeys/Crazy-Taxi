@@ -21,8 +21,6 @@ public:
 	bool CleanUp();
 	void CreatePlayer(float x, float y, float z);
 
-	void ReStartPlayer();
-
 public:
 
 	PhysVehicle3D* vehicle;

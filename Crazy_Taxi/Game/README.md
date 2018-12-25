@@ -1,7 +1,18 @@
-# Crazy Taxi by Doc Donkeys
-This is a university project made by CITM (https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we make a physics-based Crazy Taxi tribute in C & C++. We primarly used the Bullet (https://github.com/bulletphysics/bullet3) and SDL (https://www.libsdl.org/) libraries.
+﻿# Crazy Taxi by Doc Donkeys
+This is a university project made by CITM (https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we make a physics-based Crazy Taxi tribute in C & C++. We primarly used the Bullet (https://github.com/bulletphysics/bullet3), OPEN GL and SDL (https://www.libsdl.org/) libraries.
 
 Crazy Taxi (our version) is a physics-based racing game where you have to transport passangers to randomly located points in a randomly generated city full of obstacles.
+To win, reach all the flags marked by the cylinder above you, which will guide you to them. Each time you drop a passenger in a flag, he/she will thank you, and 30 extra seconds
+will be rewarded to you.
+
+When you reach the last flag destination to leave the last passenger, the flag will become blue and a disctinctive sound will sound.
+If you don't reach all destinations in time you will lose.
+
+The cylinder above your car is your best ally, it will show you the way to the next flag. It also changes color depending on how close you are to the destination.
+If you are far from the flag, the cylinder will turn green, as you get closer to the flag it will turn red, this will help you know which end
+of the cylinder you must follow.
+
+When you reach a flag you must STOP completely right next to the flag, you need top be very close to drop the passenger and get directions for the next flag!
 
 Feel free to visit our Webpage: https://docdonkeys.github.io/Crazy-Taxi/
 
@@ -17,6 +28,20 @@ No previous installations is required to play the game, just download and execut
 * Move: Up/Down/Left/Right
 * Handbrake: Spacebar
 * E: Flip vehicle
+
+### Debug Controls
+* F1 3D debug (rigidbodies, sensors, elements axis etc.)
+* F2 Toggle In-Game camera with Free View Camera (to look freely around the map)
+* F3 Add 30 seconds to the time left.
+
+## Free View Camera controls
+* W A S D To move around in x-z plane
+* F To move upwards in the Y axis
+* C To move downwards in the Y axis
+* SHIFT to move faster
+
+* Right click to look around
+
 
 ## Contributing
 1. Fork it!

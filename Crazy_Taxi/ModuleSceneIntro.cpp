@@ -29,6 +29,11 @@ bool ModuleSceneIntro::Start()
 	max_time = 120;
 	time_left = max_time;
 
+	nextStop = 0;
+
+	lost = false;
+	won = false;
+
 	//Rand seed based on current time
 	srand((uint)time(NULL));
 
@@ -849,29 +854,6 @@ void ModuleSceneIntro::ChooseGameplayGoals()
 
 void ModuleSceneIntro::StartNewGame()
 {
-	//Recolor to white the current goal independently of its color
-	if (nextStop < 5)
-	{
-		game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 1.0f);
-		game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 1.0f);
-	}
-	//Reset the index to the start
-	nextStop = 0;
-	game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
-	game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
-	taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5, taxiStop_positions[nextStop].z);
-	max_time = 120;
-	time_left = max_time;
-	time_passed.Start();
-	lost = false;
-	won = false;
-
-	App->player->ReStartPlayer();
-
-	App->audio->PlayMusic("audio/music/Yellow_Line.ogg");
-	App->audio->SetMusicVolume(30);
-	disco.Start();
-
 	App->physics->CleanUp();
 	App->scene_intro->CleanUp();
 	App->physics->Start();
