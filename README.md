@@ -18,6 +18,19 @@ No previous installations is required to play the game, just download and execut
 * Handbrake: Spacebar
 * E: Flip vehicle
 
+### Debug Controls
+* F1 3D debug (rigidbodies, sensors, elements axis etc.)
+* F2 Toggle In-Game camera with Free View Camera (to look freely around the map)
+* F3 Add 30 seconds to the time left.
+
+## Free View Camera controls
+* W A S D To move around in x-z plane
+* F To move upwards in the Y axis
+* C To move downwards in the Y axis
+* SHIFT to move faster
+
+* Right click to look around
+
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-newfeature`

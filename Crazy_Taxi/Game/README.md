@@ -42,7 +42,6 @@ No previous installations is required to play the game, just download and execut
 
 * Right click to look around
 
-
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-newfeature`
