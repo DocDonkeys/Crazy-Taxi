@@ -123,6 +123,12 @@ update_status ModuleSceneIntro::Update(float dt)
 	ground.color.Set(0.2f,0.2f,0.2f);
 	ground.Render();
 
+	//Debug Time function
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		max_time += 30;
+	}
+
 	//Check Disco Update
 	if (disco.Read() > discoDelay) {
 		for (p2List_item<Cube*>* item = buildings.getFirst(); item != nullptr; item = item->next) {

@@ -78,12 +78,17 @@ update_status ModulePlayer::Update(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 		{
 			vehicle->SetPos(vehicle->GetPosition().x, vehicle->GetPosition().y + 4, vehicle->GetPosition().z);
-			App->physics->SetVehicleRotation(vehicle, -180);
+			App->physics->SetVehicleRotation(vehicle,vec3(0,0,1), -90);
 		}
 	}
 	else
 	{
 		brake = BRAKE_POWER;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		camera_debug = !camera_debug;
 	}
 
 	if (vehicle->GetKmh() < 0.2 && vehicle->GetKmh() > -0.2f) {
@@ -115,13 +120,16 @@ update_status ModulePlayer::Update(float dt)
 
 	App->window->SetTitle(title);
 
-	App->camera->LookAt(vehicle->GetPosition());
-	//App->camera->Position = vehicle->GetPosition() + vehicle->GetForwardVec() * -1;
-	
-	App->camera->Position = (vehicle->GetPosition() - vehicle->GetForwardVec() * 20 )+ vec3(0,6,0);
+	if (camera_debug == false)
+	{
+		App->camera->LookAt(vehicle->GetPosition());
+		//App->camera->Position = vehicle->GetPosition() + vehicle->GetForwardVec() * -1;
 
-	if (App->camera->Position.y < 0.5f)
-		App->camera->Position.y = 0.5f;
+		App->camera->Position = (vehicle->GetPosition() - vehicle->GetForwardVec() * 20) + vec3(0, 6, 0);
+
+		if (App->camera->Position.y < 0.5f)
+			App->camera->Position.y = 0.5f;
+	}
 	
 	
 	return UPDATE_CONTINUE;

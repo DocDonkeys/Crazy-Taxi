@@ -199,10 +199,10 @@ void ModulePhysics3D::CleanVehicles()
 	vehicles.clear();
 }
 
-void ModulePhysics3D::SetVehicleRotation(PhysVehicle3D* vehicle, float angle)
+void ModulePhysics3D::SetVehicleRotation(PhysVehicle3D* vehicle, vec3 axis, float angle)
 {
 	btQuaternion q;
-	q.setRotation({ 0,0,1 }, angle);
+	q.setRotation({ axis.x,axis.y,axis.z }, angle);
 	btTransform t = vehicle->vehicle->getChassisWorldTransform();
 	t.setRotation(q);
 

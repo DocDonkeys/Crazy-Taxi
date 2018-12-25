@@ -30,4 +30,7 @@ public:
 	float acceleration;
 	float brake;
 	bool stopped;
+
+private:
+	bool camera_debug = false;
 };
