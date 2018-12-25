@@ -3,10 +3,10 @@ This is a university project made by [CITM](https://www.citm.upc.edu/ing/) (Cent
 
 Crazy Taxi (our version) is a physics-based racing game where you have to transport passangers to randomly located points in a randomly generated city full of obstacles.
 
-Check our latest [Release]()!
+Check our latest [Release](https://github.com/DocDonkeys/Crazy-Taxi/releases/tag/v_1.0)!
 
 ## Installation
-No previous installations is required to play the game, just download and execute the .exe file *Crazy Taxi* from releases.
+No previous installations is required to play the game, just download and execute the .exe file *Crazy_Taxi* from releases.
 
 ## Usage
 ### General Controls
@@ -17,6 +17,19 @@ No previous installations is required to play the game, just download and execut
 * Move: Up/Down/Left/Right
 * Handbrake: Spacebar
 * E: Flip vehicle
+
+### Debug Controls
+* F1 3D debug (rigidbodies, sensors, elements axis etc.)
+* F2 Toggle In-Game camera with Free View Camera (to look freely around the map)
+* F3 Add 30 seconds to the time left.
+
+## Free View Camera controls
+* W A S D To move around in x-z plane
+* F To move upwards in the Y axis
+* C To move downwards in the Y axis
+* SHIFT to move faster
+
+* Right click to look around
 
 ## Contributing
 1. Fork it!
