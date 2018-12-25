@@ -28,31 +28,6 @@ vec3 Primitive::GetPosition()
 	return pos;
 }
 
-//CHANGE/FIX Functions copied from camera
-void Primitive::LookAt(const vec3 & Pos,const vec3 & Spot)
-{
-		Reference = Spot;
-		Position = Pos;
-
-		Z = normalize(Position - Reference);
-		X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-		Y = cross(Z, X);
-
-		CalculateViewMatrix();
-	
-}
-
-float * Primitive::GetViewMatrix()
-{
-	return &transform;
-}
-
-void Primitive::CalculateViewMatrix()
-{
-	transform = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
-	ViewMatrixInverse = inverse(transform);
-}
-
 // ------------------------------------------------------------
 void Primitive::Render() const
 {

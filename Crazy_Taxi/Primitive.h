@@ -28,22 +28,11 @@ public:
 
 	vec3 GetPosition();
 
-	//Trying to do the Arrow CHANGE/FIX: Didac
-	// -----------------------------------------------------------------
-	void LookAt(const vec3 & Pos, const vec3 &Spot);
-	float* GetViewMatrix();
-
-	void CalculateViewMatrix();
-
 public:
 	
 	Color color;
 	mat4x4 transform;
 	bool axis,wire;
-	//Added this here
-	mat4x4 /*ViewMatrix,*/ ViewMatrixInverse;
-	vec3 X, Y, Z, Position, Reference;
-	//To here
 
 protected:
 	PrimitiveTypes type;

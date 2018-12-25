@@ -169,7 +169,7 @@ public:
 	uint nextStop = 0;
 
 	int time_left;
-	int max_time = 120;
+	int max_time;
 	Timer time_passed;
 	Timer goalTimer;
 	int goalCollisionDelay = 1000;

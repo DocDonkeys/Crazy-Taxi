@@ -23,8 +23,6 @@ bool ModulePlayer::Start()
 
 	CreatePlayer(0,4,10);
 	
-	App->physics->SetVehicleRotation(vehicle,180);
-	
 	return true;
 }
 
@@ -41,44 +39,51 @@ update_status ModulePlayer::Update(float dt)
 {
 	turn = acceleration = brake = 0.0f;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if (App->scene_intro->lost == App->scene_intro->won)
 	{
-		acceleration = MAX_ACCELERATION;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		if(turn < TURN_DEGREES)
-			turn +=  TURN_DEGREES;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		if(turn > -TURN_DEGREES)
-			turn -= TURN_DEGREES;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		if (vehicle->GetKmh() > 0.0f)
-			brake = BRAKE_POWER;
-		else
-			acceleration = -MAX_ACCELERATION / 2;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-	{
-		if (vehicle->GetKmh() > 0.0f)
-			brake = BRAKE_POWER;
-		else {
+		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		{
 			acceleration = MAX_ACCELERATION;
 		}
-	}
 
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			if (turn < TURN_DEGREES)
+				turn += TURN_DEGREES;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			if (turn > -TURN_DEGREES)
+				turn -= TURN_DEGREES;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			if (vehicle->GetKmh() > 0.0f)
+				brake = BRAKE_POWER;
+			else
+				acceleration = -MAX_ACCELERATION / 2;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+		{
+			if (vehicle->GetKmh() > 0.0f)
+				brake = BRAKE_POWER;
+			else {
+				acceleration = MAX_ACCELERATION;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		{
+			vehicle->SetPos(vehicle->GetPosition().x, vehicle->GetPosition().y + 4, vehicle->GetPosition().z);
+			App->physics->SetVehicleRotation(vehicle, -180);
+		}
+	}
+	else
 	{
-		vehicle->SetPos(vehicle->GetPosition().x, vehicle->GetPosition().y + 4, vehicle->GetPosition().z);
-		App->physics->SetVehicleRotation(vehicle, -180);
+		brake = BRAKE_POWER;
 	}
 
 	if (vehicle->GetKmh() < 0.2 && vehicle->GetKmh() > -0.2f) {
@@ -94,8 +99,8 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->Render();
 
-	char title[80];
-	if (App->scene_intro->lost == false)
+	char title[140];
+	if (App->scene_intro->lost == false && App->scene_intro->won == false)
 	{
 		sprintf_s(title, "%.1f Km/h, Stopped = %d, Time left= %d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
 	}
@@ -103,6 +108,11 @@ update_status ModulePlayer::Update(float dt)
 	{
 		sprintf_s(title, "%.1f Km/h, Stopped = %d,Time left= %d, GAME OVER You LOST! Press R to Restart the game", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
 	}
+	else if (App->scene_intro->won == true)
+	{
+		sprintf_s(title, "%.1f Km/h, Stopped = %d,Time left= %d, CONGRATULATIONS You WON! Press R to Restart the game", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+	}
+
 	App->window->SetTitle(title);
 
 	App->camera->LookAt(vehicle->GetPosition());
@@ -210,8 +220,7 @@ void ModulePlayer::CreatePlayer(float x, float y, float z)
 void ModulePlayer::ReStartPlayer()
 {
 	stopped = false;
-	vehicle->SetPos(0,4,10);
-	App->physics->SetVehicleRotation(vehicle,180);
+	vehicle->SetPos(0,0.5,10);
 }
 
 

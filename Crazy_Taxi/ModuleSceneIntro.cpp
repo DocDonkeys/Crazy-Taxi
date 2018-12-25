@@ -26,6 +26,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	max_time = 120;
 	time_left = max_time;
 
 	//Rand seed based on current time
@@ -155,7 +156,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	//CHANGE/FIX Dídac: Testing some kind of arrow pointing to the destination
 	arrowtest.color.Set(128, 128, 0, 0.7f);
 	
-	vec3 arrowpos = App->player->vehicle->GetPosition() + App->player->vehicle->GetForwardVec() + vec3(0,5,0);
+	vec3 arrowpos = App->player->vehicle->GetPosition() + App->player->vehicle->GetForwardVec() + vec3(0,8,0);
 
 	arrowtest.SetPos(arrowpos.x, arrowpos.y, arrowpos.z);
 	
@@ -229,6 +230,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			}
 			else if (nextStop >= 5)
 			{
+				won = true;
 				game_destinations[4]->pole->color.Set(0.0f, 0.0f, 1.0f);
 				game_destinations[4]->sign->color.Set(0.0f, 0.0f, 1.0f);
 				taxiStop_sensor->SetPos(0, 100, 0);
@@ -852,6 +854,7 @@ void ModuleSceneIntro::StartNewGame()
 	game_destinations[nextStop]->pole->color.Set(1.0f, 1.0f, 0.0f);
 	game_destinations[nextStop]->sign->color.Set(1.0f, 1.0f, 0.0f);
 	taxiStop_sensor->SetPos(taxiStop_positions[nextStop].x, taxiStop_positions[nextStop].y - 2.5, taxiStop_positions[nextStop].z);
+	max_time = 120;
 	time_left = max_time;
 	time_passed.Start();
 	lost = false;
@@ -862,4 +865,10 @@ void ModuleSceneIntro::StartNewGame()
 	App->audio->PlayMusic("audio/music/Yellow_Line.ogg");
 	App->audio->SetMusicVolume(30);
 	disco.Start();
+
+	App->physics->CleanUp();
+	App->scene_intro->CleanUp();
+	App->physics->Start();
+	App->scene_intro->Start();
+	App->player->Start();
 }
