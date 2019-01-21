@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "ModuleInput.h"
 
+
+#pragma comment(lib, "LogitechSteeringWheel/lib/x86/LogitechSteeringWheelLib.lib")
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -28,6 +31,12 @@ bool ModuleInput::Init()
 	{
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
+	}
+
+	//the LogiSteeringInitialize function parameter determines whether we’ll use X-input or not 
+	if (LogiSteeringInitialize(true) != TRUE)
+	{
+		LOG("Logitech Wheel could not initialize! Window handler not in foreground, will recheck each LogiUpdate()");
 	}
 
 	return ret;
@@ -114,6 +123,32 @@ update_status ModuleInput::PreUpdate(float dt)
 		}
 	}
 
+	//Logitech Steering wheel 
+	if (LogiUpdate())
+	{
+		//If we know we will only have 1 steering wheel we would just need index 0 but this way we wont hardcode it (We can always set MAX_STWHEELS to 1) 
+		//and if we want to implement local multiplyare it will make everithing easier, since we would change stWheel with an array
+		for (int index = 0; index < MAX_STWHEELS; ++index)
+		{
+			if (LogiIsConnected(index))
+			{
+				stWheel = LogiGetStateENGINES(index);
+
+				iX = stWheel->lX;
+				iY = stWheel->lY;
+				iZ = stWheel->lZ;
+			}
+		}
+		
+	}
+
+
+
+
+
+
+
+	//Keyboard check if we're quitting
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
 		return UPDATE_STOP;
 

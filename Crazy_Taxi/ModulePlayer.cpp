@@ -104,10 +104,10 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->Render();
 
-	char title[140];
+	char title[300];
 	if (App->scene_intro->lost == false && App->scene_intro->won == false)
 	{
-		sprintf_s(title, "Crazy Taxi! %.1f Km/h, Stopped = %d, Time left= %d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left);
+		sprintf_s(title, "Crazy Taxi! %.1f Km/h, Stopped = %d, Time left= %d, iX=%d, iY =%d, iZ=%d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left,App->input->GetWheeliX(), App->input->GetWheeliY(), App->input->GetWheeliZ());
 	}
 	else if (App->scene_intro->lost == true)
 	{

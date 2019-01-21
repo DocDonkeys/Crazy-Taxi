@@ -2,7 +2,10 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include "LogitechSteeringWheel/Include/LogitechSteeringWheelLib.h"
+
 #define MAX_MOUSE_BUTTONS 5
+#define MAX_STWHEELS 1
 
 enum KEY_STATE
 {
@@ -58,6 +61,22 @@ public:
 		return mouse_y_motion;
 	}
 
+public: //LOGITECH STEERING WHEEL
+
+	int GetWheeliX()
+	{
+		return iX;
+	}
+
+	int GetWheeliY()
+	{
+		return iY;
+	}
+
+	int GetWheeliZ()
+	{
+		return iZ;
+	}
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -67,4 +86,8 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+
+	//Logitech Steering Wheel 
+	DIJOYSTATE2ENGINES* stWheel;
+	int iX, iY, iZ;
 };
