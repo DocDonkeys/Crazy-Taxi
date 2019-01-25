@@ -15,6 +15,17 @@ enum KEY_STATE
 	KEY_UP
 };
 
+struct steeringWheel
+{
+	float steer;
+	float pedal_gas;
+	float pedal_brake;
+	float pedal_clutch;
+
+
+
+};
+
 class ModuleInput : public Module
 {
 public:
@@ -63,20 +74,16 @@ public:
 
 public: //LOGITECH STEERING WHEEL
 
-	int GetWheeliX()
+	steeringWheel GetStWheel() const
 	{
-		return iX;
+		return logitech_wheel;
 	}
 
-	int GetWheeliY()
+	bool WheelConnected() const
 	{
-		return iY;
+		return stWheel_connected;
 	}
 
-	int GetWheeliZ()
-	{
-		return iZ;
-	}
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -90,4 +97,6 @@ private:
 	//Logitech Steering Wheel 
 	DIJOYSTATE2ENGINES* stWheel;
 	int iX, iY, iZ;
+	steeringWheel logitech_wheel;
+	bool stWheel_connected = false;
 };

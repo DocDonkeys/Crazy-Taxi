@@ -98,6 +98,13 @@ update_status ModulePlayer::Update(float dt)
 		stopped = false;
 	}
 
+	if (App->input->WheelConnected() == true)
+	{
+		acceleration = App->input->GetStWheel().pedal_gas * MAX_ACCELERATION;
+		turn = App->input->GetStWheel().steer * STWHEEL_TURN_DEGREES;
+		brake = App->input->GetStWheel().pedal_brake * STWHEEL_BRAKE_POWER;
+	}
+
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
@@ -107,7 +114,7 @@ update_status ModulePlayer::Update(float dt)
 	char title[300];
 	if (App->scene_intro->lost == false && App->scene_intro->won == false)
 	{
-		sprintf_s(title, "Crazy Taxi! %.1f Km/h, Stopped = %d, Time left= %d, iX=%d, iY =%d, iZ=%d", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left,App->input->GetWheeliX(), App->input->GetWheeliY(), App->input->GetWheeliZ());
+		sprintf_s(title, "Crazy Taxi! %.1f Km/h, Stopped = %d, Time left= %d, steer=%f, gas=%f,  brake=%f", vehicle->GetKmh(), (int)stopped, App->scene_intro->time_left,App->input->GetStWheel().steer, App->input->GetStWheel().pedal_gas, App->input->GetStWheel().pedal_brake);
 	}
 	else if (App->scene_intro->lost == true)
 	{

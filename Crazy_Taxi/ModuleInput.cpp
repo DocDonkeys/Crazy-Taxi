@@ -132,21 +132,21 @@ update_status ModuleInput::PreUpdate(float dt)
 		{
 			if (LogiIsConnected(index))
 			{
+				stWheel_connected = true;
+
 				stWheel = LogiGetStateENGINES(index);
 
-				iX = stWheel->lX;
-				iY = stWheel->lY;
-				iZ = stWheel->lZ;
+				logitech_wheel.steer =  float(-1 * stWheel->lX / 3276.7);
+				logitech_wheel.pedal_gas = float(-1 * ( stWheel->lY - 32767) / 65535.0f);
+				logitech_wheel.pedal_brake = float(-1 * (stWheel->lRz - 32767) / 65535.0f);
+			}
+			else
+			{
+				stWheel_connected = false;
 			}
 		}
 		
 	}
-
-
-
-
-
-
 
 	//Keyboard check if we're quitting
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
