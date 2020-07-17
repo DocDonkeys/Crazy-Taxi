@@ -3,7 +3,7 @@ This is a university project made by [CITM](https://www.citm.upc.edu/ing/) (Cent
 
 Crazy Taxi (our version) is a physics-based racing game where you have to transport passangers to randomly located points in a randomly generated city full of obstacles.
 
-Check our latest [Release](https://github.com/DocDonkeys/Crazy-Taxi/releases/tag/v_1.0)!
+Check our latest [Release](https://github.com/DocDonkeys/Crazy-Taxi/releases)!
 
 ## Installation
 No previous installations is required to play the game, just download and execute the .exe file *Crazy_Taxi* from releases.
